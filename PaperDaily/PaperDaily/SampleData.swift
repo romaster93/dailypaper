@@ -109,6 +109,9 @@ enum SampleData {
         LibraryItem(paper: libICML,  relativeDate: LocalizedString("1주 전", "1 week ago"), progress: 100)
     ]
 
+    /// Every known paper — used to resolve saved/read IDs back to full records.
+    static var catalog: [Paper] { feed + [libEMNLP, libICLR, libTACL, libCVPR, libNAACL, libICML] }
+
     // Full records for library-only papers (not in today's feed).
     private static let libEMNLP = Paper(
         id: "emnlp-factuality-kg", venue: "EMNLP 2025", venueDetail: "EMNLP 2025 · LONG PAPER",

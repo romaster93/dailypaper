@@ -8,6 +8,12 @@ struct LibraryView: View {
     @State private var tab: LibraryTab = .toRead
     @Namespace private var tabNS
 
+    init() {
+        // Test hook: open a specific tab (e.g. SIMCTL_CHILD_PD_LIB_TAB=saved).
+        let raw = ProcessInfo.processInfo.environment["PD_LIB_TAB"] ?? ""
+        _tab = State(initialValue: LibraryTab(rawValue: raw) ?? .toRead)
+    }
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
@@ -47,14 +53,23 @@ struct LibraryView: View {
                 }
                 .padding(.bottom, 20)
 
-                // 행 리스트 (탭 전환 시 페이드)
-                VStack(spacing: 12) {
-                    ForEach(tab.items) { item in
-                        rowView(for: item)
-                            .transition(.opacity)
+                // 행 리스트 (상태 연동, 탭 전환 시 페이드)
+                let items = app.libraryItems(for: tab)
+                if items.isEmpty {
+                    Text(app.libraryEmptyMessage(for: tab))
+                        .font(AppFont.sans(14))
+                        .foregroundStyle(Palette.faint2)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
+                } else {
+                    VStack(spacing: 12) {
+                        ForEach(items) { item in
+                            rowView(for: item)
+                                .transition(.opacity)
+                        }
                     }
+                    .animation(.easeInOut(duration: 0.25), value: items)
                 }
-                .animation(.easeInOut(duration: 0.25), value: tab)
             }
             .padding(.horizontal, 26)
             .padding(.top, 8)
@@ -62,12 +77,21 @@ struct LibraryView: View {
         }
     }
 
-    /// 행 탭 → 논문 상세로 이동.
+    /// 행 탭 → 논문 상세로 이동. 롱프레스 → 삭제.
     private func rowView(for item: LibraryItem) -> some View {
         NavigationLink(value: item.paper) {
             LibraryRow(item: item)
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button(role: .destructive) {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    app.removeLibraryItem(item, from: tab)
+                }
+            } label: {
+                Label(app.strings.remove, systemImage: "trash")
+            }
+        }
     }
 }
 

@@ -65,9 +65,11 @@ final class AppState: ObservableObject {
     @Published var isLoadingFeed = false
     private var didInitialLoad = false
 
-    // 저장/읽음 상태 (카드·상세 액션 → 라이브러리/통계 반영)
+    // 저장/읽음 상태 (카드·상세 액션 → 라이브러리 탭에 반영)
     @Published var savedIDs: Set<String> = []
     @Published var readIDs: Set<String> = []
+    // 읽을 목록(진행 중) — 시드된 목록, 스와이프/롱프레스로 삭제 가능
+    @Published var toReadItems: [LibraryItem] = SampleData.toRead
 
     // UI 테스트/미리보기 진입용 (프로덕션 무동작: env 미설정 시 nil/false).
     // 예: SIMCTL_CHILD_PD_ONBOARDED=1 SIMCTL_CHILD_PD_TAB=stats
@@ -88,6 +90,8 @@ final class AppState: ObservableObject {
         // Language: env/arg override → saved setting → device default. (didSet won't fire in init.)
         if let raw = string("PD_LANG"), let l = AppLanguage(rawValue: raw) { lang = l }
         else { lang = .deviceDefault }
+        // Test hook: pre-seed a couple of saved papers (verify Saved tab wiring).
+        if flag("PD_SEED_SAVED") { savedIDs = Set(SampleData.feed.prefix(2).map(\.id)) }
         // All stored properties are now initialized → safe to touch `self`.
         if flag("PD_ONBOARDED") || launchDetailPaper != nil { onboarded = true }
         if let raw = string("PD_TAB"), !raw.isEmpty, let tab = Tab(rawValue: raw) { selectedTab = tab }
@@ -213,5 +217,39 @@ final class AppState: ObservableObject {
     func isRead(_ id: String) -> Bool { readIDs.contains(id) }
     func toggleRead(_ id: String) {
         if readIDs.contains(id) { readIDs.remove(id) } else { readIDs.insert(id) }
+    }
+
+    // MARK: Library (state-driven)
+
+    /// Rows for a tab: To-read is the seeded list; Saved/Done reflect user actions.
+    func libraryItems(for tab: LibraryTab) -> [LibraryItem] {
+        switch tab {
+        case .toRead:
+            return toReadItems
+        case .saved:
+            return SampleData.catalog
+                .filter { savedIDs.contains($0.id) }
+                .map { LibraryItem(paper: $0, relativeDate: LocalizedString("오늘", "Today"), progress: nil) }
+        case .done:
+            return SampleData.catalog
+                .filter { readIDs.contains($0.id) }
+                .map { LibraryItem(paper: $0, relativeDate: LocalizedString("오늘", "Today"), progress: 100) }
+        }
+    }
+
+    func removeLibraryItem(_ item: LibraryItem, from tab: LibraryTab) {
+        switch tab {
+        case .toRead: toReadItems.removeAll { $0.id == item.id }
+        case .saved:  savedIDs.remove(item.paper.id)
+        case .done:   readIDs.remove(item.paper.id)
+        }
+    }
+
+    func libraryEmptyMessage(for tab: LibraryTab) -> String {
+        switch tab {
+        case .toRead: strings.emptyToRead
+        case .saved:  strings.emptySaved
+        case .done:   strings.emptyDone
+        }
     }
 }

@@ -45,6 +45,7 @@ struct Strings {
     let citationsUnit, minReadUnit: String
     // Library
     let libTitle, libTab1, libTab2, libTab3, notStarted: String
+    let remove, emptyToRead, emptySaved, emptyDone: String
     // Weekly summary
     let weekTitle, statRead, statSaved, statStreak, topicDist, highlightLabel: String
     // Settings
@@ -72,6 +73,7 @@ struct Strings {
         showTranslation: "번역본 보기", showOriginal: "원문 보기",
         citationsUnit: "인용", minReadUnit: "분 읽기",
         libTitle: "라이브러리", libTab1: "읽을 목록", libTab2: "저장됨", libTab3: "완료", notStarted: "시작 전",
+        remove: "삭제", emptyToRead: "읽을 논문이 없어요.", emptySaved: "저장한 논문이 없어요.", emptyDone: "완료한 논문이 없어요.",
         weekTitle: "이번 주 요약", statRead: "읽음", statSaved: "저장", statStreak: "연속",
         topicDist: "주제 분포", highlightLabel: "이번 주 하이라이트",
         settingsTitle: "설정", setLanguage: "언어", setNotif: "알림", setTransLang: "번역 언어",
@@ -98,6 +100,7 @@ struct Strings {
         showTranslation: "View translation", showOriginal: "View original",
         citationsUnit: "citations", minReadUnit: "min read",
         libTitle: "Library", libTab1: "To read", libTab2: "Saved", libTab3: "Done", notStarted: "Not started",
+        remove: "Remove", emptyToRead: "Nothing to read yet.", emptySaved: "No saved papers yet.", emptyDone: "No finished papers yet.",
         weekTitle: "This week", statRead: "Read", statSaved: "Saved", statStreak: "Streak",
         topicDist: "TOPIC MIX", highlightLabel: "HIGHLIGHT OF THE WEEK",
         settingsTitle: "Settings", setLanguage: "Language", setNotif: "Notifications", setTransLang: "Translation",
