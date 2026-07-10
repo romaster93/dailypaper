@@ -8,7 +8,7 @@
 ## About the Design Files
 이 번들의 HTML 파일은 **디자인 레퍼런스(프로토타입)** 입니다 — 의도한 룩앤필과 동작을 보여주는 시안이며, 그대로 복붙해 배포할 프로덕션 코드가 아닙니다. 목표는 이 디자인을 **대상 코드베이스의 기존 환경(React Native, Flutter, SwiftUI, 네이티브 등)과 그 패턴·라이브러리로 재구현**하는 것입니다. 아직 코드베이스가 없다면, 이 앱에 가장 적합한 프레임워크(모바일이므로 React Native 또는 Flutter 권장)를 선택해 구현하세요.
 
-`논문 데일리 (standalone).html` 을 브라우저로 열면 실제 인터랙션(번역 토글)을 확인할 수 있습니다. `논문 데일리.dc.html` 은 마크업/구조 참고용 소스입니다.
+`design-prototype.html` 을 브라우저로 열면 실제 인터랙션(번역 토글)을 확인할 수 있습니다. `design-source.html` 은 마크업/구조 참고용 소스입니다.
 
 ## Fidelity
 **High-fidelity (hifi).** 최종 색상·타이포그래피·간격·인터랙션이 확정된 픽셀 단위 시안입니다. 아래 명세의 정확한 값(hex, px, weight)을 대상 코드베이스의 컴포넌트/토큰으로 그대로 재현하세요.
@@ -173,5 +173,5 @@
 - 폰트: Google Fonts — **Newsreader**, **Public Sans**, **JetBrains Mono**. (네이티브에서는 번들 폰트로 포함하거나 유사 시스템 폰트로 대체.)
 
 ## Files
-- `논문 데일리 (standalone).html` — 자체 완결 프로토타입(브라우저에서 열어 번역 토글 등 실제 동작 확인).
-- `논문 데일리.dc.html` — 구조 참고용 소스 마크업.
+- `design-prototype.html` — 자체 완결 프로토타입(브라우저에서 열어 번역 토글 등 실제 동작 확인).
+- `design-source.html` — 구조 참고용 소스 마크업.

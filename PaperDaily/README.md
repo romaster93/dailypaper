@@ -1,6 +1,6 @@
 # 논문 데일리 (Daily Papers) — iOS 앱
 
-디자인 핸드오프(`../README.md`, `../논문 데일리 (standalone).html`)를 **네이티브 SwiftUI**로 재구현한 iOS 앱입니다. High-fidelity 시안의 색상·타이포그래피·간격·인터랙션을 디자인 토큰 그대로 옮겼습니다.
+디자인 핸드오프(`../DESIGN.md`, `../design-prototype.html`)를 **네이티브 SwiftUI**로 재구현한 iOS 앱입니다. High-fidelity 시안의 색상·타이포그래피·간격·인터랙션을 디자인 토큰 그대로 옮겼습니다.
 
 ## 실행 방법
 1. Xcode 16 이상에서 `PaperDaily.xcodeproj` 를 엽니다.
