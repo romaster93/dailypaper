@@ -9,47 +9,12 @@ enum Frequency: String, CaseIterable, Identifiable {
     case daily, weekly, monthly
     var id: String { rawValue }
 
-    var label: String {
+    /// Localized segment label. (Header date/title/subtitle/hint → FeedHeaderText.)
+    func label(_ s: Strings) -> String {
         switch self {
-        case .daily:   "매일"
-        case .weekly:  "매주"
-        case .monthly: "매달"
-        }
-    }
-
-    /// 온보딩 안내문.
-    var hint: String {
-        switch self {
-        case .daily:   "매일 아침 새 논문 5편을 받아요."
-        case .weekly:  "매주 월요일 아침 12편을 받아요."
-        case .monthly: "매달 1일 30편을 받아요."
-        }
-    }
-
-    /// 피드 헤더 — 날짜.
-    var feedDate: String {
-        switch self {
-        case .daily:   "2026. 7. 9  수요일"
-        case .weekly:  "2026 · 28주차"
-        case .monthly: "2026. 7월"
-        }
-    }
-
-    /// 피드 헤더 — 타이틀.
-    var feedTitle: String {
-        switch self {
-        case .daily:   "오늘의 추천"
-        case .weekly:  "이번 주 추천"
-        case .monthly: "이번 달 추천"
-        }
-    }
-
-    /// 피드 헤더 — 부제.
-    var feedSub: String {
-        switch self {
-        case .daily:   "관심 분야에서 고른 5편 · 평균 정합성 92%"
-        case .weekly:  "관심 분야에서 고른 12편 · 평균 정합성 92%"
-        case .monthly: "관심 분야에서 고른 30편 · 평균 정합성 92%"
+        case .daily:   s.freqDaily
+        case .weekly:  s.freqWeekly
+        case .monthly: s.freqMonthly
         }
     }
 }
@@ -83,8 +48,8 @@ struct Paper: Identifiable, Hashable {
     let citations: Int
     let readMinutes: Int
 
-    /// "왜 추천했나요?" 본문. `**...**` 는 볼드(마크다운).
-    let reason: String
+    /// "왜 추천했나요?" 본문(UI 언어 따름). `**...**` 는 볼드(마크다운).
+    let reason: LocalizedString
 
     func title(translated: Bool) -> String { translated ? detailTitleKO : detailTitleEN }
     func authors(translated: Bool) -> String { translated ? authorsKO : authorsEN }
@@ -95,7 +60,7 @@ struct Paper: Identifiable, Hashable {
 
 struct LibraryItem: Identifiable, Hashable {
     let paper: Paper           // full record → row taps open the detail screen
-    let relativeDate: String
+    let relativeDate: LocalizedString
     /// nil == 시작 전.
     let progress: Int?
     var id: String { paper.id }

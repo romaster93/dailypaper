@@ -81,9 +81,9 @@ struct PillTag: View {
 // MARK: - Match badge (정합성 %)
 
 struct MatchBadge: View {
-    let score: Int
+    let text: String
     var body: some View {
-        Text("\(score)% 일치")
+        Text(text)
             .font(AppFont.mono(11, .medium))
             .foregroundStyle(Palette.accentDeep)
             .padding(.horizontal, 9)
@@ -178,7 +178,7 @@ struct AppTabBar: View {
                                     .matchedGeometryEffect(id: "activeDot", in: ns)
                             }
                         }
-                        Text(tab.label)
+                        Text(tab.label(app.strings))
                             .font(AppFont.sans(11, active ? .semibold : .medium))
                             .foregroundStyle(active ? Palette.ink : Palette.faint2)
                     }

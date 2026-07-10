@@ -6,6 +6,7 @@
 import SwiftUI
 
 struct SplashView: View {
+    @EnvironmentObject var app: AppState
     @State private var appeared = false     // splashIn: fade + rise + scale
     @State private var barSlid = false      // splashBar: indeterminate sweep
 
@@ -42,7 +43,7 @@ struct SplashView: View {
                 // 하단 로딩 인디케이터
                 VStack(spacing: 22) {
                     IndeterminateBar(slid: barSlid)
-                    Text("오늘의 논문을 고르는 중…")
+                    Text(app.strings.loading)
                         .font(AppFont.mono(11))
                         .tracking(0.88)                 // 0.08em @ 11px
                         .foregroundStyle(Palette.splashTagline)

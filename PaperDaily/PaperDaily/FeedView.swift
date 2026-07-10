@@ -13,7 +13,7 @@ struct FeedView: View {
                 // 헤더 (원격 헤더 우선, 없으면 추천 주기 연동)
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 8) {
-                        Text(app.feedHeader?.date ?? app.frequency.feedDate)
+                        Text(app.feedHeaderText.date)
                             .font(AppFont.mono(12))
                             .tracking(0.48)
                             .foregroundStyle(Palette.accentDeep)
@@ -24,12 +24,12 @@ struct FeedView: View {
                         }
                     }
                     .padding(.bottom, 8)
-                    Text(app.feedHeader?.title ?? app.frequency.feedTitle)
+                    Text(app.feedHeaderText.title)
                         .font(AppFont.serif(30, .medium))
                         .tracking(-0.6)
                         .foregroundStyle(Palette.ink)
                         .padding(.bottom, 6)
-                    Text(app.feedHeader?.subtitle ?? app.frequency.feedSub)
+                    Text(app.feedHeaderText.subtitle)
                         .font(AppFont.sans(14))
                         .foregroundStyle(Palette.muted)
                     if let note = app.feedStatusNote {
@@ -46,7 +46,7 @@ struct FeedView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(app.feedFilters, id: \.self) { filter in
-                            FilterChip(title: filter, active: app.activeFilter == filter) {
+                            FilterChip(title: app.topicLabel(filter), active: app.activeFilter == filter) {
                                 withAnimation(.easeInOut(duration: 0.22)) { app.activeFilter = filter }
                             }
                         }
@@ -69,7 +69,7 @@ struct FeedView: View {
                 .animation(.easeInOut(duration: 0.28), value: app.activeFilter)
 
                 if app.filteredFeed.isEmpty {
-                    Text("해당 분야의 추천이 아직 없어요.")
+                    Text(app.strings.emptyFeed)
                         .font(AppFont.sans(14))
                         .foregroundStyle(Palette.faint2)
                         .frame(maxWidth: .infinity)
@@ -122,7 +122,7 @@ struct PaperCard: View {
                     .font(AppFont.mono(11))
                     .foregroundStyle(Palette.tagText)
                 Spacer()
-                MatchBadge(score: paper.matchScore)
+                MatchBadge(text: app.matchText(paper.matchScore))
             }
 
             Text(paper.feedTitle)
@@ -150,7 +150,7 @@ struct PaperCard: View {
                 .padding(.bottom, 13)
 
             HStack(spacing: 6) {
-                ForEach(paper.tags, id: \.self) { PillTag(text: $0) }
+                ForEach(paper.tags, id: \.self) { PillTag(text: app.tagLabel($0)) }
             }
             .padding(.bottom, 14)
 
@@ -164,7 +164,7 @@ struct PaperCard: View {
                 Button {
                     app.toggleSaved(paper.id)
                 } label: {
-                    Text(app.isSaved(paper.id) ? "✓ 저장됨" : "＋ 저장")
+                    Text(app.isSaved(paper.id) ? app.strings.saved : app.strings.save)
                         .font(AppFont.sans(13.5, .semibold))
                         .foregroundStyle(app.isSaved(paper.id) ? Palette.accentDeep : Palette.ink)
                 }
@@ -172,7 +172,7 @@ struct PaperCard: View {
 
                 Spacer()
 
-                Text("자세히 →")
+                Text(app.strings.more)
                     .font(AppFont.sans(13.5, .semibold))
                     .foregroundStyle(Palette.accentDeep)
             }

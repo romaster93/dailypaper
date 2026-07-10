@@ -11,13 +11,15 @@
 <meta name="design_doc_mode" content="canvas">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box}
   body{margin:0}
   a{color:#A34E2E;text-decoration:none}
   a:hover{color:#8f4023}
   ::-webkit-scrollbar{width:0;height:0}
+  @keyframes splashIn{0%{opacity:0;transform:translateY(10px) scale(0.96)}100%{opacity:1;transform:none}}
+  @keyframes splashBar{0%{transform:translateX(-100%)}100%{transform:translateX(180%)}}
 </style>
 </helmet>
 <template id="__bundler_thumbnail">
@@ -35,10 +37,36 @@
     <div style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#7A7263;background:#EFEBE0;border:1px solid #CFC8B8;padding:5px 11px;border-radius:999px;margin-bottom:20px">1a · 홈 화면 시안</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:#A34E2E;margin-bottom:12px">논문 데일리 · DAILY PAPERS</div>
     <h1 style="font-family:'Newsreader',serif;font-weight:500;font-size:42px;line-height:1.1;letter-spacing:-0.02em;margin:0 0 14px">매일 아침, 관심 분야 논문 다섯 편.</h1>
-    <p style="font-size:16px;line-height:1.55;color:#5F5849;margin:0;max-width:560px">대학원생과 연구자를 위한 추천 리더. 온보딩으로 관심 분야를 고르면, 매일 아침 정합성 높은 논문을 골라 주고 주간 요약으로 흐름을 되돌아봅니다.</p>
+    <p style="font-size:16px;line-height:1.55;color:#5F5849;margin:0 0 8px;max-width:560px">대학원생과 연구자를 위한 추천 리더. 온보딩으로 관심 분야를 고르면, 매일 아침 정합성 높은 논문을 골라 주고 주간 요약으로 흐름을 되돌아봅니다.</p>
+    <p style="font-size:13px;line-height:1.5;color:#8A8375;margin:0;font-family:'JetBrains Mono',monospace">온보딩의 언어 · 추천 주기 · 번역본 보기 토글은 실제로 작동합니다. 언어를 바꾸면 모든 화면의 UI가 한/영으로 전환됩니다.</p>
   </div>
 
   <div style="display:flex;gap:52px;align-items:flex-start;flex-wrap:nowrap">
+
+    <!-- ====== 00 실행화면(스플래시) ====== -->
+    <div style="display:flex;flex-direction:column;gap:16px;align-items:center;flex:none">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;color:#8A8375">00 · 실행화면</div>
+      <div style="width:390px;height:844px;background:#C0603A;border-radius:46px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(30,22,14,0.05),0 34px 60px -22px rgba(45,32,20,0.34)">
+        <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#F7E9E1">
+          <span style="font-weight:500">9:41</span>
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:11px">LTE</span>
+            <div style="width:22px;height:11px;border:1.3px solid #F7E9E1;border-radius:3px;position:relative;opacity:0.85"><div style="position:absolute;top:1.5px;left:1.5px;bottom:1.5px;width:13px;background:#F7E9E1;border-radius:1px"></div></div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;animation:splashIn 0.7s ease both">
+          <div style="font-family:'Dancing Script',cursive;font-weight:600;font-size:80px;line-height:1;color:#F7ECE5">Daily Papers</div>
+          <div style="width:54px;height:1.5px;background:rgba(247,236,229,0.5)"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:400;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#EBBFA9">Expand your insight</div>
+        </div>
+        <div style="flex:none;padding:0 0 66px;display:flex;flex-direction:column;align-items:center;gap:22px">
+          <div style="width:104px;height:3px;border-radius:999px;background:rgba(247,236,229,0.24);overflow:hidden">
+            <div style="width:46%;height:100%;border-radius:999px;background:#F7ECE5;animation:splashBar 1.15s ease-in-out infinite"></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#EBBFA9">{{ loading }}</div>
+        </div>
+      </div>
+    </div>
 
     <!-- ====== 01 온보딩 ====== -->
     <div style="display:flex;flex-direction:column;gap:16px;align-items:center;flex:none">
@@ -52,38 +80,43 @@
           </div>
         </div>
         <div style="flex:1;overflow-y:auto;padding:8px 26px 130px">
-          <div style="display:flex;align-items:center;gap:12px;margin:6px 0 30px">
+          <div style="display:flex;align-items:center;gap:12px;margin:6px 0 26px">
             <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A39A88">02 / 03</div>
             <div style="flex:1;height:4px;border-radius:999px;background:#E4DDCF;overflow:hidden"><div style="width:66%;height:100%;background:#C0603A;border-radius:999px"></div></div>
           </div>
-          <h2 style="font-family:'Newsreader',serif;font-weight:500;font-size:30px;line-height:1.22;letter-spacing:-0.02em;margin:0 0 12px">어떤 분야를<br>관심 있게 보시나요?</h2>
-          <p style="font-size:14.5px;line-height:1.55;color:#6E675B;margin:0 0 24px">관심 분야와 추천 주기를 고르면, 그에 맞춰 논문을 골라 드려요. 언제든 다시 바꿀 수 있어요.</p>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin:0 0 10px">추천 주기</div>
+          <h2 style="font-family:'Newsreader',serif;font-weight:500;font-size:30px;line-height:1.22;letter-spacing:-0.02em;margin:0 0 12px">{{ obTitle1 }}<br>{{ obTitle2 }}</h2>
+          <p style="font-size:14.5px;line-height:1.55;color:#6E675B;margin:0 0 24px">{{ obSub }}</p>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin:0 0 10px">{{ langLabel }}</div>
+          <div style="display:flex;gap:4px;background:#EDE7DB;border-radius:14px;padding:4px;margin-bottom:22px">
+            <button onClick="{{ setLangKo }}" style="{{ segLangKo }}">한국어</button>
+            <button onClick="{{ setLangEn }}" style="{{ segLangEn }}">English</button>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin:0 0 10px">{{ freqLabel }}</div>
           <div style="display:flex;gap:4px;background:#EDE7DB;border-radius:14px;padding:4px">
-            <button onClick="{{ setDaily }}" style="{{ segDaily }}">매일</button>
-            <button onClick="{{ setWeekly }}" style="{{ segWeekly }}">매주</button>
-            <button onClick="{{ setMonthly }}" style="{{ segMonthly }}">매달</button>
+            <button onClick="{{ setDaily }}" style="{{ segDaily }}">{{ freqDaily }}</button>
+            <button onClick="{{ setWeekly }}" style="{{ segWeekly }}">{{ freqWeekly }}</button>
+            <button onClick="{{ setMonthly }}" style="{{ segMonthly }}">{{ freqMonthly }}</button>
           </div>
           <div style="font-size:13px;color:#948D7C;margin:11px 2px 26px">{{ freqHint }}</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin:0 0 12px">관심 분야</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin:0 0 12px">{{ interestsLabel }}</div>
           <div style="display:flex;flex-wrap:wrap;gap:10px">
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">머신러닝</span>
-            <span style="font-size:14.5px;font-weight:600;color:#A34E2E;background:#F4E4D7;border:1px solid #DDA684;padding:11px 16px;border-radius:999px">자연어처리 ✓</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">컴퓨터비전</span>
-            <span style="font-size:14.5px;font-weight:600;color:#A34E2E;background:#F4E4D7;border:1px solid #DDA684;padding:11px 16px;border-radius:999px">HCI ✓</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">강화학습</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">그래프 학습</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">로보틱스</span>
-            <span style="font-size:14.5px;font-weight:600;color:#A34E2E;background:#F4E4D7;border:1px solid #DDA684;padding:11px 16px;border-radius:999px">생성모델 ✓</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">정보검색</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">음성·오디오</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">추천시스템</span>
-            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">최적화</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicMl }}</span>
+            <span style="font-size:14.5px;font-weight:600;color:#A34E2E;background:#F4E4D7;border:1px solid #DDA684;padding:11px 16px;border-radius:999px">{{ topicNlp }} ✓</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicCv }}</span>
+            <span style="font-size:14.5px;font-weight:600;color:#A34E2E;background:#F4E4D7;border:1px solid #DDA684;padding:11px 16px;border-radius:999px">{{ topicHci }} ✓</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicRl }}</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicGraph }}</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicRobo }}</span>
+            <span style="font-size:14.5px;font-weight:600;color:#A34E2E;background:#F4E4D7;border:1px solid #DDA684;padding:11px 16px;border-radius:999px">{{ topicGen }} ✓</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicIr }}</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicAudio }}</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicRec }}</span>
+            <span style="font-size:14.5px;color:#5F5849;background:#fff;border:1px solid #E7E0D2;padding:11px 16px;border-radius:999px">{{ topicOpt }}</span>
           </div>
         </div>
         <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 26px 30px;background:linear-gradient(to top,#F4F0E8 64%,rgba(244,240,232,0));display:flex;flex-direction:column;gap:11px">
-          <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#948D7C">3개 선택됨 · 최소 1개</div>
-          <button style="height:54px;border:none;border-radius:16px;background:#C0603A;color:#fff;font-family:'Public Sans';font-size:16px;font-weight:600;cursor:pointer">다음</button>
+          <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#948D7C">{{ selected }}</div>
+          <button style="height:54px;border:none;border-radius:16px;background:#C0603A;color:#fff;font-family:'Public Sans';font-size:16px;font-weight:600;cursor:pointer">{{ next }}</button>
         </div>
       </div>
     </div>
@@ -106,77 +139,77 @@
             <p style="font-size:14px;color:#6E675B;margin:0 0 18px">{{ feedSub }}</p>
           </div>
           <div style="display:flex;gap:8px;overflow-x:auto;padding:2px 4px 16px">
-            <span style="flex:none;font-size:13px;font-weight:600;color:#fff;background:#201C16;padding:8px 15px;border-radius:999px">전체</span>
-            <span style="flex:none;font-size:13px;font-weight:500;color:#6E675B;background:#fff;border:1px solid #E7E0D2;padding:8px 15px;border-radius:999px">자연어처리</span>
-            <span style="flex:none;font-size:13px;font-weight:500;color:#6E675B;background:#fff;border:1px solid #E7E0D2;padding:8px 15px;border-radius:999px">생성모델</span>
-            <span style="flex:none;font-size:13px;font-weight:500;color:#6E675B;background:#fff;border:1px solid #E7E0D2;padding:8px 15px;border-radius:999px">HCI</span>
+            <span style="flex:none;font-size:13px;font-weight:600;color:#fff;background:#201C16;padding:8px 15px;border-radius:999px">{{ filterAll }}</span>
+            <span style="flex:none;font-size:13px;font-weight:500;color:#6E675B;background:#fff;border:1px solid #E7E0D2;padding:8px 15px;border-radius:999px">{{ topicNlp }}</span>
+            <span style="flex:none;font-size:13px;font-weight:500;color:#6E675B;background:#fff;border:1px solid #E7E0D2;padding:8px 15px;border-radius:999px">{{ topicGen }}</span>
+            <span style="flex:none;font-size:13px;font-weight:500;color:#6E675B;background:#fff;border:1px solid #E7E0D2;padding:8px 15px;border-radius:999px">{{ topicHci }}</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:15px">
 
             <article style="background:#fff;border:1px solid #EDE6D8;border-radius:22px;padding:19px;box-shadow:0 1px 2px rgba(40,30,20,0.03),0 14px 26px -20px rgba(40,30,20,0.28)">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">ACL 2026 · EN</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#A34E2E;background:#F4E4D7;padding:5px 9px;border-radius:999px">96% 일치</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#A34E2E;background:#F4E4D7;padding:5px 9px;border-radius:999px">{{ match1 }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:19px;line-height:1.3;letter-spacing:-0.01em;margin:11px 0 8px">Grounded Consistency in RAG: Decoding for Citation Faithfulness</h3>
               <div style="font-size:13px;color:#6E675B;margin-bottom:9px">J. Kim, R. Alvarez +3</div>
               <p style="font-size:13px;line-height:1.55;color:#7A7365;margin:0 0 13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">We optimize consistency between generated text and evidence documents directly at decoding time, cutting citation errors by 42% across four QA benchmarks.</p>
               <div style="display:flex;gap:6px;margin-bottom:14px">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">#검색증강</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">#LLM</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">{{ tagRetrieval }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">{{ tagLlm }}</span>
               </div>
               <div style="height:1px;background:#EFE8DB;margin:0 -19px 12px"></div>
               <div style="display:flex;align-items:center;justify-content:space-between">
-                <button style="background:none;border:none;padding:0;font-family:'Public Sans';font-size:13.5px;font-weight:600;color:#201C16;cursor:pointer">＋ 저장</button>
-                <span style="font-size:13.5px;font-weight:600;color:#A34E2E">자세히 →</span>
+                <button style="background:none;border:none;padding:0;font-family:'Public Sans';font-size:13.5px;font-weight:600;color:#201C16;cursor:pointer">{{ save }}</button>
+                <span style="font-size:13.5px;font-weight:600;color:#A34E2E">{{ more }}</span>
               </div>
             </article>
 
             <article style="background:#fff;border:1px solid #EDE6D8;border-radius:22px;padding:19px;box-shadow:0 1px 2px rgba(40,30,20,0.03),0 14px 26px -20px rgba(40,30,20,0.28)">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">CHI 2026 · EN</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#A34E2E;background:#F4E4D7;padding:5px 9px;border-radius:999px">92% 일치</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#A34E2E;background:#F4E4D7;padding:5px 9px;border-radius:999px">{{ match2 }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:19px;line-height:1.3;letter-spacing:-0.01em;margin:11px 0 8px">Reading Flows for Researchers: How Peripheral Summaries Shape Comprehension</h3>
               <div style="font-size:13px;color:#6E675B;margin-bottom:9px">S. Lee, M. Chen +2</div>
               <p style="font-size:13px;line-height:1.55;color:#7A7365;margin:0 0 13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">Placing key summaries in the reader's peripheral vision reduced paragraph revisits and improved comprehension accuracy on long papers.</p>
               <div style="display:flex;gap:6px;margin-bottom:14px">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">#HCI</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">#읽기경험</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">{{ tagHci }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">{{ tagReading }}</span>
               </div>
               <div style="height:1px;background:#EFE8DB;margin:0 -19px 12px"></div>
               <div style="display:flex;align-items:center;justify-content:space-between">
-                <button style="background:none;border:none;padding:0;font-family:'Public Sans';font-size:13.5px;font-weight:600;color:#201C16;cursor:pointer">＋ 저장</button>
-                <span style="font-size:13.5px;font-weight:600;color:#A34E2E">자세히 →</span>
+                <button style="background:none;border:none;padding:0;font-family:'Public Sans';font-size:13.5px;font-weight:600;color:#201C16;cursor:pointer">{{ save }}</button>
+                <span style="font-size:13.5px;font-weight:600;color:#A34E2E">{{ more }}</span>
               </div>
             </article>
 
             <article style="background:#fff;border:1px solid #EDE6D8;border-radius:22px;padding:19px;box-shadow:0 1px 2px rgba(40,30,20,0.03),0 14px 26px -20px rgba(40,30,20,0.28)">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">NeurIPS 2025 · EN</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#A34E2E;background:#F4E4D7;padding:5px 9px;border-radius:999px">89% 일치</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#A34E2E;background:#F4E4D7;padding:5px 9px;border-radius:999px">{{ match3 }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:19px;line-height:1.3;letter-spacing:-0.01em;margin:11px 0 8px">Low-Cost Fine-Tuning by Reusing Diffusion Sampling Trajectories</h3>
               <div style="font-size:13px;color:#6E675B;margin-bottom:9px">H. Park +4</div>
               <p style="font-size:13px;line-height:1.55;color:#7A7365;margin:0 0 13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">Caching a pretrained diffusion model's sampling trajectories enables domain fine-tuning at one-seventh of the compute.</p>
               <div style="display:flex;gap:6px;margin-bottom:14px">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">#생성모델</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">#효율화</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">{{ tagGen }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:4px 9px;border-radius:7px">{{ tagEff }}</span>
               </div>
               <div style="height:1px;background:#EFE8DB;margin:0 -19px 12px"></div>
               <div style="display:flex;align-items:center;justify-content:space-between">
-                <button style="background:none;border:none;padding:0;font-family:'Public Sans';font-size:13.5px;font-weight:600;color:#201C16;cursor:pointer">＋ 저장</button>
-                <span style="font-size:13.5px;font-weight:600;color:#A34E2E">자세히 →</span>
+                <button style="background:none;border:none;padding:0;font-family:'Public Sans';font-size:13.5px;font-weight:600;color:#201C16;cursor:pointer">{{ save }}</button>
+                <span style="font-size:13.5px;font-weight:600;color:#A34E2E">{{ more }}</span>
               </div>
             </article>
 
           </div>
         </div>
         <div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:rgba(244,240,232,0.94);border-top:1px solid #E7E0D2;display:flex;justify-content:space-around;padding-top:13px">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#201C16"><div style="width:5px;height:5px;border-radius:50%;background:#C0603A"></div>홈</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>라이브러리</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>통계</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>설정</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#201C16"><div style="width:5px;height:5px;border-radius:50%;background:#C0603A"></div>{{ navHome }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navLib }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navStats }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navSettings }}</div>
         </div>
       </div>
     </div>
@@ -193,8 +226,8 @@
           </div>
         </div>
         <div style="height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px">
-          <span style="font-size:14px;font-weight:600;color:#6E675B">← 오늘의 추천</span>
-          <span style="font-size:14px;font-weight:500;color:#948D7C">공유</span>
+          <span style="font-size:14px;font-weight:600;color:#6E675B">← {{ detailBack }}</span>
+          <span style="font-size:14px;font-weight:500;color:#948D7C">{{ detailShare }}</span>
         </div>
         <div style="flex:1;overflow-y:auto;padding:6px 26px 40px">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
@@ -204,11 +237,11 @@
           <h1 style="font-family:'Newsreader',serif;font-weight:500;font-size:26px;line-height:1.28;letter-spacing:-0.02em;margin:0 0 14px">{{ detailTitle }}</h1>
           <div style="font-size:14px;color:#5F5849;line-height:1.5;margin-bottom:12px">{{ detailAuthors }}</div>
           <div style="display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#8A8073;padding-bottom:20px;border-bottom:1px solid #E7E0D2">
-            <span>2026</span><span>인용 14</span><span>12분 읽기</span>
+            <span>2026</span><span>{{ cited }}</span><span>{{ readTime }}</span>
           </div>
           <div style="display:flex;gap:10px;margin:20px 0 24px">
-            <button style="flex:1;height:50px;border:none;border-radius:14px;background:#C0603A;color:#fff;font-family:'Public Sans';font-size:15px;font-weight:600;cursor:pointer">저장하기</button>
-            <button style="flex:1;height:50px;border:1px solid #DBD3C3;border-radius:14px;background:#fff;color:#201C16;font-family:'Public Sans';font-size:15px;font-weight:600;cursor:pointer">읽음 표시</button>
+            <button style="flex:1;height:50px;border:none;border-radius:14px;background:#C0603A;color:#fff;font-family:'Public Sans';font-size:15px;font-weight:600;cursor:pointer">{{ detailSave }}</button>
+            <button style="flex:1;height:50px;border:1px solid #DBD3C3;border-radius:14px;background:#fff;color:#201C16;font-family:'Public Sans';font-size:15px;font-weight:600;cursor:pointer">{{ markRead }}</button>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 12px">
             <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88">{{ abstractLabel }}</span>
@@ -216,14 +249,14 @@
           </div>
           <p style="font-size:14.5px;line-height:1.68;color:#3F3A31;margin:0 0 22px">{{ detailAbstract }}</p>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">#검색증강</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">#LLM</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">#인용신뢰도</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">#디코딩</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">{{ tagRetrieval }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">{{ tagLlm }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">{{ tagCite }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;background:#EDE7DB;padding:5px 10px;border-radius:7px">{{ tagDecode }}</span>
           </div>
           <div style="background:#F4E4D7;border-radius:18px;padding:17px 18px;margin-top:22px">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;color:#A34E2E;margin-bottom:8px">왜 추천했나요?</div>
-            <p style="font-size:14px;line-height:1.55;color:#6B4A38;margin:0">회원님이 저장한 <b>‘RAG 인용 신뢰도’</b> 논문과 방법론이 유사하고, 자주 읽는 ACL 계열이에요.</p>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;color:#A34E2E;margin-bottom:8px">{{ reasonLabel }}</div>
+            <p style="font-size:14px;line-height:1.55;color:#6B4A38;margin:0">{{ reasonPre }}<b>{{ reasonBold }}</b>{{ reasonPost }}</p>
           </div>
         </div>
       </div>
@@ -241,18 +274,18 @@
           </div>
         </div>
         <div style="flex:1;overflow-y:auto;padding:8px 26px 104px">
-          <h2 style="font-family:'Newsreader',serif;font-weight:500;font-size:30px;letter-spacing:-0.02em;margin:6px 0 16px">라이브러리</h2>
+          <h2 style="font-family:'Newsreader',serif;font-weight:500;font-size:30px;letter-spacing:-0.02em;margin:6px 0 16px">{{ libTitle }}</h2>
           <div style="display:flex;gap:22px;border-bottom:1px solid #E7E0D2;margin-bottom:20px">
-            <span style="padding-bottom:12px;border-bottom:2px solid #C0603A;margin-bottom:-1px;font-size:15px;font-weight:600;color:#201C16">읽을 목록</span>
-            <span style="padding-bottom:12px;font-size:15px;font-weight:500;color:#948D7C">저장됨</span>
-            <span style="padding-bottom:12px;font-size:15px;font-weight:500;color:#948D7C">완료</span>
+            <span style="padding-bottom:12px;border-bottom:2px solid #C0603A;margin-bottom:-1px;font-size:15px;font-weight:600;color:#201C16">{{ libTab1 }}</span>
+            <span style="padding-bottom:12px;font-size:15px;font-weight:500;color:#948D7C">{{ libTab2 }}</span>
+            <span style="padding-bottom:12px;font-size:15px;font-weight:500;color:#948D7C">{{ libTab3 }}</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:12px">
 
             <div style="background:#fff;border:1px solid #EDE6D8;border-radius:16px;padding:15px 16px">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">EMNLP 2025</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">2일 전</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">{{ lib1Date }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:16px;line-height:1.3;margin:0 0 12px">Evaluating the Factuality of Long-Form Summaries with Knowledge Graphs</h3>
               <div style="display:flex;align-items:center;gap:10px">
@@ -264,7 +297,7 @@
             <div style="background:#fff;border:1px solid #EDE6D8;border-radius:16px;padding:15px 16px">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">ICLR 2026</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">4일 전</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">{{ lib2Date }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:16px;line-height:1.3;margin:0 0 12px">Mitigating Representation Collapse in Contrastive Learning on Small Data</h3>
               <div style="display:flex;align-items:center;gap:10px">
@@ -276,34 +309,34 @@
             <div style="background:#fff;border:1px solid #EDE6D8;border-radius:16px;padding:15px 16px">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">TACL 2025</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">1주 전</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">{{ lib3Date }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:16px;line-height:1.3;margin:0 0 12px">Anchor Selection for Cross-Lingual Alignment of Multilingual Embeddings</h3>
               <div style="display:flex;align-items:center;gap:10px">
                 <div style="flex:1;height:8px;border-radius:999px;background:#EDE7DB;overflow:hidden"><div style="width:8%;height:100%;background:#C0603A;border-radius:999px"></div></div>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">시작 전</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">{{ notStarted }}</span>
               </div>
             </div>
 
             <div style="background:#fff;border:1px solid #EDE6D8;border-radius:16px;padding:15px 16px">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">CVPR 2025</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">1주 전</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A997">{{ lib4Date }}</span>
               </div>
               <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:16px;line-height:1.3;margin:0 0 12px">Temporal Consistency Regularization for Video Diffusion Models</h3>
               <div style="display:flex;align-items:center;gap:10px">
                 <div style="flex:1;height:8px;border-radius:999px;background:#EDE7DB;overflow:hidden"><div style="width:8%;height:100%;background:#C0603A;border-radius:999px"></div></div>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">시작 전</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">{{ notStarted }}</span>
               </div>
             </div>
 
           </div>
         </div>
         <div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:rgba(244,240,232,0.94);border-top:1px solid #E7E0D2;display:flex;justify-content:space-around;padding-top:13px">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>홈</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#201C16"><div style="width:5px;height:5px;border-radius:50%;background:#C0603A"></div>라이브러리</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>통계</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>설정</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navHome }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#201C16"><div style="width:5px;height:5px;border-radius:50%;background:#C0603A"></div>{{ navLib }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navStats }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navSettings }}</div>
         </div>
       </div>
     </div>
@@ -320,57 +353,57 @@
           </div>
         </div>
         <div style="flex:1;overflow-y:auto;padding:8px 26px 104px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;color:#A34E2E;margin-bottom:8px">7월 3일 – 7월 9일</div>
-          <h2 style="font-family:'Newsreader',serif;font-weight:500;font-size:30px;letter-spacing:-0.02em;margin:0 0 20px">이번 주 요약</h2>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;color:#A34E2E;margin-bottom:8px">{{ weekRange }}</div>
+          <h2 style="font-family:'Newsreader',serif;font-weight:500;font-size:30px;letter-spacing:-0.02em;margin:0 0 20px">{{ weekTitle }}</h2>
           <div style="display:flex;gap:11px;margin-bottom:28px">
             <div style="flex:1;background:#fff;border:1px solid #EDE6D8;border-radius:18px;padding:16px 14px">
               <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:500;color:#201C16;line-height:1">12</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;margin-top:6px">읽음</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;margin-top:6px">{{ statRead }}</div>
             </div>
             <div style="flex:1;background:#fff;border:1px solid #EDE6D8;border-radius:18px;padding:16px 14px">
               <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:500;color:#201C16;line-height:1">8</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;margin-top:6px">저장</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;margin-top:6px">{{ statSaved }}</div>
             </div>
             <div style="flex:1;background:#C0603A;border-radius:18px;padding:16px 14px">
-              <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:500;color:#fff;line-height:1">5일</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#F4E0D4;margin-top:6px">연속</div>
+              <div style="font-family:'Newsreader',serif;font-size:30px;font-weight:500;color:#fff;line-height:1">{{ streakVal }}</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#F4E0D4;margin-top:6px">{{ statStreak }}</div>
             </div>
           </div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin-bottom:16px">주제 분포</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin-bottom:16px">{{ topicDist }}</div>
           <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:30px">
             <div style="display:flex;align-items:center;gap:12px">
-              <span style="width:72px;font-size:13px;color:#3F3A31">자연어처리</span>
+              <span style="width:72px;font-size:13px;color:#3F3A31">{{ topicNlp }}</span>
               <div style="flex:1;height:10px;border-radius:999px;background:#EDE7DB;overflow:hidden"><div style="width:42%;height:100%;background:#C0603A;border-radius:999px"></div></div>
               <span style="width:32px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">42%</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
-              <span style="width:72px;font-size:13px;color:#3F3A31">생성모델</span>
+              <span style="width:72px;font-size:13px;color:#3F3A31">{{ topicGen }}</span>
               <div style="flex:1;height:10px;border-radius:999px;background:#EDE7DB;overflow:hidden"><div style="width:26%;height:100%;background:#C0603A;opacity:0.82;border-radius:999px"></div></div>
               <span style="width:32px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">26%</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
-              <span style="width:72px;font-size:13px;color:#3F3A31">HCI</span>
+              <span style="width:72px;font-size:13px;color:#3F3A31">{{ topicHci }}</span>
               <div style="flex:1;height:10px;border-radius:999px;background:#EDE7DB;overflow:hidden"><div style="width:20%;height:100%;background:#C0603A;opacity:0.64;border-radius:999px"></div></div>
               <span style="width:32px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">20%</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
-              <span style="width:72px;font-size:13px;color:#3F3A31">기타</span>
+              <span style="width:72px;font-size:13px;color:#3F3A31">{{ topicEtc }}</span>
               <div style="flex:1;height:10px;border-radius:999px;background:#EDE7DB;overflow:hidden"><div style="width:12%;height:100%;background:#C0603A;opacity:0.46;border-radius:999px"></div></div>
               <span style="width:32px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073">12%</span>
             </div>
           </div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin-bottom:14px">이번 주 하이라이트</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#A39A88;margin-bottom:14px">{{ highlightLabel }}</div>
           <div style="background:#fff;border:1px solid #EDE6D8;border-radius:18px;padding:18px">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;margin-bottom:8px">가장 오래 읽은 논문 · 27분</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8073;margin-bottom:8px">{{ highlightMeta }}</div>
             <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:18px;line-height:1.3;margin:0 0 6px">Grounded Consistency in RAG: Decoding for Citation Faithfulness</h3>
             <div style="font-size:13px;color:#6E675B">J. Kim +4 · ACL 2026</div>
           </div>
         </div>
         <div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:rgba(244,240,232,0.94);border-top:1px solid #E7E0D2;display:flex;justify-content:space-around;padding-top:13px">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>홈</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>라이브러리</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#201C16"><div style="width:5px;height:5px;border-radius:50%;background:#C0603A"></div>통계</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>설정</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navHome }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navLib }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#201C16"><div style="width:5px;height:5px;border-radius:50%;background:#C0603A"></div>{{ navStats }}</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#948D7C"><div style="width:5px;height:5px;border-radius:50%;background:transparent"></div>{{ navSettings }}</div>
         </div>
       </div>
     </div>
@@ -380,10 +413,12 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { translated: false, frequency: 'daily' };
+  state = { translated: false, frequency: 'daily', lang: 'ko' };
   renderVals() {
     const t = this.state.translated;
     const f = this.state.frequency;
+    const lang = this.state.lang;
+
     const seg = (on) => ({
       flex: 1, textAlign: 'center', padding: '10px 0', border: 'none', cursor: 'pointer',
       fontFamily: "'Public Sans', sans-serif", fontSize: '14px', fontWeight: 600, borderRadius: '11px',
@@ -392,30 +427,100 @@ class Component extends DCLogic {
       boxShadow: on ? '0 1px 2px rgba(40,30,20,0.10)' : 'none',
     });
     const setFreq = (v) => () => this.setState({ frequency: v });
-    const feedByFreq = {
-      daily:   { date: '2026. 7. 9  수요일', title: '오늘의 추천', sub: '관심 분야에서 고른 5편 · 평균 정합성 92%',  hint: '매일 아침 새 논문 5편을 받아요.' },
-      weekly:  { date: '2026 · 28주차',      title: '이번 주 추천', sub: '관심 분야에서 고른 12편 · 평균 정합성 92%', hint: '매주 월요일 아침 12편을 받아요.' },
-      monthly: { date: '2026. 7월',          title: '이번 달 추천', sub: '관심 분야에서 고른 30편 · 평균 정합성 92%', hint: '매달 1일 30편을 받아요.' },
+    const setLang = (v) => () => this.setState({ lang: v });
+
+    const L = {
+      ko: {
+        loading: '오늘의 논문을 고르는 중…',
+        obTitle1: '어떤 분야를', obTitle2: '관심 있게 보시나요?',
+        obSub: '관심 분야와 추천 주기를 고르면, 그에 맞춰 논문을 골라 드려요. 언제든 다시 바꿀 수 있어요.',
+        langLabel: '언어', freqLabel: '추천 주기', interestsLabel: '관심 분야',
+        freqDaily: '매일', freqWeekly: '매주', freqMonthly: '매달',
+        selected: '3개 선택됨 · 최소 1개', next: '다음',
+        topicMl: '머신러닝', topicNlp: '자연어처리', topicCv: '컴퓨터비전', topicHci: 'HCI',
+        topicRl: '강화학습', topicGraph: '그래프 학습', topicRobo: '로보틱스', topicGen: '생성모델',
+        topicIr: '정보검색', topicAudio: '음성·오디오', topicRec: '추천시스템', topicOpt: '최적화', topicEtc: '기타',
+        filterAll: '전체', matchWord: '일치', save: '＋ 저장', more: '자세히 →',
+        navHome: '홈', navLib: '라이브러리', navStats: '통계', navSettings: '설정',
+        detailBack: '오늘의 추천', detailShare: '공유', cited: '인용 14', readTime: '12분 읽기',
+        detailSave: '저장하기', markRead: '읽음 표시', reasonLabel: '왜 추천했나요?',
+        reasonPre: '회원님이 저장한 ', reasonBold: '‘RAG 인용 신뢰도’', reasonPost: ' 논문과 방법론이 유사하고, 자주 읽는 ACL 계열이에요.',
+        flagOriginal: 'EN 원문', flagTranslated: '한국어 번역본',
+        absLabel: '초록', absTranslated: '초록 · 번역본',
+        showTranslation: '번역본 보기', showOriginal: '원문 보기',
+        libTitle: '라이브러리', libTab1: '읽을 목록', libTab2: '저장됨', libTab3: '완료',
+        lib1Date: '2일 전', lib2Date: '4일 전', lib3Date: '1주 전', lib4Date: '1주 전', notStarted: '시작 전',
+        weekRange: '7월 3일 – 7월 9일', weekTitle: '이번 주 요약',
+        statRead: '읽음', statSaved: '저장', statStreak: '연속', streakVal: '5일',
+        topicDist: '주제 분포', highlightLabel: '이번 주 하이라이트', highlightMeta: '가장 오래 읽은 논문 · 27분',
+        tagRetrieval: '#검색증강', tagLlm: '#LLM', tagHci: '#HCI', tagReading: '#읽기경험',
+        tagGen: '#생성모델', tagEff: '#효율화', tagCite: '#인용신뢰도', tagDecode: '#디코딩',
+      },
+      en: {
+        loading: 'Curating today\u2019s papers…',
+        obTitle1: 'What fields', obTitle2: 'are you interested in?',
+        obSub: 'Pick your fields and how often you\u2019d like recommendations, and we\u2019ll curate papers to match. You can change these anytime.',
+        langLabel: 'LANGUAGE', freqLabel: 'FREQUENCY', interestsLabel: 'FIELDS',
+        freqDaily: 'Daily', freqWeekly: 'Weekly', freqMonthly: 'Monthly',
+        selected: '3 selected · min 1', next: 'Continue',
+        topicMl: 'Machine Learning', topicNlp: 'NLP', topicCv: 'Computer Vision', topicHci: 'HCI',
+        topicRl: 'Reinforcement L.', topicGraph: 'Graph Learning', topicRobo: 'Robotics', topicGen: 'Generative',
+        topicIr: 'Info Retrieval', topicAudio: 'Speech & Audio', topicRec: 'Recommenders', topicOpt: 'Optimization', topicEtc: 'Other',
+        filterAll: 'All', matchWord: 'match', save: '＋ Save', more: 'Read →',
+        navHome: 'Home', navLib: 'Library', navStats: 'Stats', navSettings: 'Settings',
+        detailBack: 'Today', detailShare: 'Share', cited: '14 citations', readTime: '12 min read',
+        detailSave: 'Save', markRead: 'Mark read', reasonLabel: 'Why this paper?',
+        reasonPre: 'Similar in method to ', reasonBold: '\u201CRAG citation faithfulness\u201D', reasonPost: ' — a paper you saved — and from ACL, which you read often.',
+        flagOriginal: 'Original · EN', flagTranslated: 'Korean · translated',
+        absLabel: 'ABSTRACT', absTranslated: 'ABSTRACT · TRANSLATED',
+        showTranslation: 'View translation', showOriginal: 'View original',
+        libTitle: 'Library', libTab1: 'To read', libTab2: 'Saved', libTab3: 'Done',
+        lib1Date: '2 days ago', lib2Date: '4 days ago', lib3Date: '1 week ago', lib4Date: '1 week ago', notStarted: 'Not started',
+        weekRange: 'Jul 3 – Jul 9', weekTitle: 'This week',
+        statRead: 'Read', statSaved: 'Saved', statStreak: 'Streak', streakVal: '5 days',
+        topicDist: 'TOPIC MIX', highlightLabel: 'HIGHLIGHT OF THE WEEK', highlightMeta: 'Longest read · 27 min',
+        tagRetrieval: '#retrieval', tagLlm: '#LLM', tagHci: '#HCI', tagReading: '#reading',
+        tagGen: '#generative', tagEff: '#efficiency', tagCite: '#faithfulness', tagDecode: '#decoding',
+      },
     };
-    const fb = feedByFreq[f];
+    const S = L[lang];
+
+    const feedByFreq = {
+      ko: {
+        daily:   { date: '2026. 7. 9  수요일', title: '오늘의 추천',  sub: '관심 분야에서 고른 5편 · 평균 정합성 92%',  hint: '매일 아침 새 논문 5편을 받아요.' },
+        weekly:  { date: '2026 · 28주차',       title: '이번 주 추천', sub: '관심 분야에서 고른 12편 · 평균 정합성 92%', hint: '매주 월요일 아침 12편을 받아요.' },
+        monthly: { date: '2026. 7월',           title: '이번 달 추천', sub: '관심 분야에서 고른 30편 · 평균 정합성 92%', hint: '매달 1일 30편을 받아요.' },
+      },
+      en: {
+        daily:   { date: 'Wed, Jul 9, 2026', title: 'Today\u2019s picks',      sub: 'Curated 5 from your fields · avg. 92% match',  hint: 'You\u2019ll get 5 fresh papers every morning.' },
+        weekly:  { date: 'Week 28 · 2026',   title: 'This week\u2019s picks',  sub: 'Curated 12 from your fields · avg. 92% match', hint: 'You\u2019ll get 12 papers every Monday morning.' },
+        monthly: { date: 'July 2026',        title: 'This month\u2019s picks', sub: 'Curated 30 from your fields · avg. 92% match', hint: 'You\u2019ll get 30 papers on the 1st of each month.' },
+      },
+    };
+    const fb = feedByFreq[lang][f];
+
+    const detailTitleKo = '검색 증강 생성의 근거 정합성: 인용 신뢰도를 높이는 디코딩';
+    const detailTitleEn = 'Grounded Consistency in Retrieval-Augmented Generation: Decoding for Higher Citation Faithfulness';
+    const detailAuthorsKo = '김지원, 라파엘 알바레즈, 메이 첸 외 2명';
+    const detailAuthorsEn = 'Jiwon Kim, Rafael Alvarez, Mei Chen, +2 others';
+    const detailAbstractKo = '대규모 언어모델이 생성한 문장과 근거 문서 간의 정합성을 디코딩 단계에서 직접 최적화하는 방법을 제안한다. 각 토큰이 근거 문서에 얼마나 뒷받침되는지를 실시간으로 추정해, 정합성이 낮은 후보에 페널티를 부여한다. 네 개의 QA 벤치마크에서 인용 오류를 평균 42% 줄이면서도 응답 품질은 유지했다.';
+    const detailAbstractEn = 'We propose a method that directly optimizes the consistency between model-generated sentences and their supporting documents at the decoding stage. By estimating in real time how well each token is grounded in the evidence, we penalize poorly-supported candidates. Across four QA benchmarks, our approach reduces citation errors by 42% on average while preserving answer quality.';
+
     return {
+      ...S,
+      segLangKo: seg(lang === 'ko'), segLangEn: seg(lang === 'en'),
+      setLangKo: setLang('ko'), setLangEn: setLang('en'),
       segDaily: seg(f === 'daily'), segWeekly: seg(f === 'weekly'), segMonthly: seg(f === 'monthly'),
       setDaily: setFreq('daily'), setWeekly: setFreq('weekly'), setMonthly: setFreq('monthly'),
-      freqHint: fb.hint,
-      feedDate: fb.date, feedTitle: fb.title, feedSub: fb.sub,
-      langFlag: t ? '한국어 번역본' : 'EN 원문',
-      abstractLabel: t ? '초록 · 번역본' : 'ABSTRACT',
-      toggleLabel: t ? '원문 보기' : '번역본 보기',
+      freqHint: fb.hint, feedDate: fb.date, feedTitle: fb.title, feedSub: fb.sub,
+      match1: '96% ' + S.matchWord, match2: '92% ' + S.matchWord, match3: '89% ' + S.matchWord,
+      langFlag: t ? S.flagTranslated : S.flagOriginal,
+      abstractLabel: t ? S.absTranslated : S.absLabel,
+      toggleLabel: t ? S.showOriginal : S.showTranslation,
       toggleTranslation: () => this.setState(s => ({ translated: !s.translated })),
-      detailTitle: t
-        ? '검색 증강 생성의 근거 정합성: 인용 신뢰도를 높이는 디코딩'
-        : 'Grounded Consistency in Retrieval-Augmented Generation: Decoding for Higher Citation Faithfulness',
-      detailAuthors: t
-        ? '김지원, 라파엘 알바레즈, 메이 첸 외 2명'
-        : 'Jiwon Kim, Rafael Alvarez, Mei Chen, +2 others',
-      detailAbstract: t
-        ? '대규모 언어모델이 생성한 문장과 근거 문서 간의 정합성을 디코딩 단계에서 직접 최적화하는 방법을 제안한다. 각 토큰이 근거 문서에 얼마나 뒷받침되는지를 실시간으로 추정해, 정합성이 낮은 후보에 페널티를 부여한다. 네 개의 QA 벤치마크에서 인용 오류를 평균 42% 줄이면서도 응답 품질은 유지했다.'
-        : 'We propose a method that directly optimizes the consistency between model-generated sentences and their supporting documents at the decoding stage. By estimating in real time how well each token is grounded in the evidence, we penalize poorly-supported candidates. Across four QA benchmarks, our approach reduces citation errors by 42% on average while preserving answer quality.',
+      detailTitle: t ? detailTitleKo : detailTitleEn,
+      detailAuthors: t ? detailAuthorsKo : detailAuthorsEn,
+      detailAbstract: t ? detailAbstractKo : detailAbstractEn,
     };
   }
 }

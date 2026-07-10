@@ -28,7 +28,8 @@
       "year": "2026",
       "citations": 14,
       "readMinutes": 12,
-      "reason": "회원님이 저장한 **‘RAG 인용 신뢰도’** 논문과 방법론이 유사하고, 자주 읽는 ACL 계열이에요."
+      "reason": "회원님이 저장한 **‘RAG 인용 신뢰도’** 논문과 방법론이 유사하고, 자주 읽는 ACL 계열이에요.",
+      "reasonEn": "Similar in method to **“RAG citation faithfulness,”** a paper you saved — and from ACL, which you read often."
     },
     {
       "id": "reading-flows",
@@ -50,7 +51,8 @@
       "year": "2026",
       "citations": 6,
       "readMinutes": 9,
-      "reason": "회원님이 저장한 **읽기 경험** 관련 논문과 주제가 맞닿아 있고, 자주 읽는 CHI 계열이에요."
+      "reason": "회원님이 저장한 **읽기 경험** 관련 논문과 주제가 맞닿아 있고, 자주 읽는 CHI 계열이에요.",
+      "reasonEn": "Overlaps with the **reading-experience** papers you saved, and it’s from CHI, which you read often."
     },
     {
       "id": "diffusion-trajectory-reuse",
@@ -72,7 +74,8 @@
       "year": "2025",
       "citations": 21,
       "readMinutes": 15,
-      "reason": "회원님이 자주 읽는 **생성모델 효율화** 주제와 방법론이 가깝고, 저장한 디퓨전 논문과 이어져요."
+      "reason": "회원님이 자주 읽는 **생성모델 효율화** 주제와 방법론이 가깝고, 저장한 디퓨전 논문과 이어져요.",
+      "reasonEn": "Close to the **generative-efficiency** topics you read often, and it follows the diffusion paper you saved."
     }
   ]
 }

@@ -11,18 +11,24 @@ struct SettingsView: View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
 
-                Text("설정")
+                Text(app.strings.settingsTitle)
                     .font(AppFont.serif(30, .medium))
                     .tracking(-0.6)
                     .foregroundStyle(Palette.ink)
                     .padding(.top, 6)
                     .padding(.bottom, 24)
 
+                // 언어
+                SectionLabel(text: app.strings.langLabel)
+                    .padding(.bottom, 10)
+                LanguageSegment(selection: $app.lang)
+                    .padding(.bottom, 26)
+
                 // 추천 주기
-                SectionLabel(text: "추천 주기")
+                SectionLabel(text: app.strings.freqLabel)
                     .padding(.bottom, 10)
                 FrequencySegment(selection: $app.frequency)
-                Text(app.frequency.hint)
+                Text(FeedHeaderText.of(app.lang, app.frequency).hint)
                     .font(AppFont.sans(13))
                     .foregroundStyle(Palette.faint2)
                     .padding(.horizontal, 2)
@@ -30,12 +36,12 @@ struct SettingsView: View {
                     .padding(.bottom, 26)
 
                 // 관심 분야
-                SectionLabel(text: "관심 분야")
+                SectionLabel(text: app.strings.interestsLabel)
                     .padding(.bottom, 12)
                 FlowLayout(hSpacing: 10, vSpacing: 10) {
                     ForEach(SampleData.allInterests, id: \.self) { interest in
                         InterestChip(
-                            title: interest,
+                            title: app.topicLabel(interest),
                             selected: app.interests.contains(interest)
                         ) {
                             app.toggleInterest(interest)
@@ -46,11 +52,11 @@ struct SettingsView: View {
 
                 // 계정 / 정보
                 VStack(spacing: 0) {
-                    settingsRow(title: "알림", value: freqNotice)
+                    settingsRow(title: app.strings.setNotif, value: freqNotice)
                     Divider().background(Palette.divider)
-                    settingsRow(title: "번역 언어", value: "한국어")
+                    settingsRow(title: app.strings.setTransLang, value: app.lang == .ko ? "한국어" : "Korean")
                     Divider().background(Palette.divider)
-                    settingsRow(title: "논문 소스", value: "arXiv · Semantic Scholar")
+                    settingsRow(title: app.strings.setSource, value: "arXiv · Semantic Scholar")
                 }
                 .background(Palette.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay(
@@ -62,7 +68,7 @@ struct SettingsView: View {
                 Button {
                     app.onboarded = false
                 } label: {
-                    Text("온보딩 다시 보기")
+                    Text(app.strings.replayOnboarding)
                         .font(AppFont.sans(15, .semibold))
                         .foregroundStyle(Palette.accentDeep)
                         .frame(maxWidth: .infinity)
@@ -83,9 +89,9 @@ struct SettingsView: View {
 
     private var freqNotice: String {
         switch app.frequency {
-        case .daily:   "매일 아침"
-        case .weekly:  "매주 월요일"
-        case .monthly: "매달 1일"
+        case .daily:   app.strings.notifDaily
+        case .weekly:  app.strings.notifWeekly
+        case .monthly: app.strings.notifMonthly
         }
     }
 

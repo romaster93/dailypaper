@@ -7,12 +7,12 @@ enum Tab: String, CaseIterable, Identifiable {
     case home, library, stats, settings
     var id: String { rawValue }
 
-    var label: String {
+    func label(_ s: Strings) -> String {
         switch self {
-        case .home:     "홈"
-        case .library:  "라이브러리"
-        case .stats:    "통계"
-        case .settings: "설정"
+        case .home:     s.navHome
+        case .library:  s.navLib
+        case .stats:    s.navStats
+        case .settings: s.navSettings
         }
     }
 }
@@ -21,11 +21,11 @@ enum LibraryTab: String, CaseIterable, Identifiable {
     case toRead, saved, done
     var id: String { rawValue }
 
-    var label: String {
+    func label(_ s: Strings) -> String {
         switch self {
-        case .toRead: "읽을 목록"
-        case .saved:  "저장됨"
-        case .done:   "완료"
+        case .toRead: s.libTab1
+        case .saved:  s.libTab2
+        case .done:   s.libTab3
         }
     }
 
@@ -40,6 +40,12 @@ enum LibraryTab: String, CaseIterable, Identifiable {
 
 @MainActor
 final class AppState: ObservableObject {
+    // 앱 UI 언어 (기본: 기기 언어) — 변경 시 영속
+    @Published var lang: AppLanguage = .ko {
+        didSet { UserDefaults.standard.set(lang.rawValue, forKey: "PD_LANG") }
+    }
+    var strings: Strings { Strings.of(lang) }
+
     // 실행화면(스플래시)
     @Published var isLaunching = true
 
@@ -79,6 +85,9 @@ final class AppState: ObservableObject {
         // Assign stored `let`s first — no `self` access allowed before both are set.
         launchTranslated = flag("PD_TRANSLATED")
         launchDetailPaper = flag("PD_DETAIL") ? SampleData.feed.first : nil
+        // Language: env/arg override → saved setting → device default. (didSet won't fire in init.)
+        if let raw = string("PD_LANG"), let l = AppLanguage(rawValue: raw) { lang = l }
+        else { lang = .deviceDefault }
         // All stored properties are now initialized → safe to touch `self`.
         if flag("PD_ONBOARDED") || launchDetailPaper != nil { onboarded = true }
         if let raw = string("PD_TAB"), !raw.isEmpty, let tab = Tab(rawValue: raw) { selectedTab = tab }
@@ -119,11 +128,33 @@ final class AppState: ObservableObject {
     /// Short status line under the feed header (offline / load failure).
     var feedStatusNote: String? {
         switch feedSource {
-        case .cache:  "오프라인 · 마지막으로 받은 추천"
-        case .failed: "새 추천을 불러오지 못했어요 · 당겨서 새로고침"
+        case .cache:  strings.offlineNote
+        case .failed: strings.loadFailNote
         default:      nil
         }
     }
+
+    // MARK: Localized dynamic strings
+
+    /// Feed header (localized sample by lang×frequency; remote override wins).
+    var feedHeaderText: FeedHeaderText {
+        if let h = feedHeader { return FeedHeaderText(date: h.date, title: h.title, subtitle: h.subtitle, hint: "") }
+        return FeedHeaderText.of(lang, frequency)
+    }
+    func matchText(_ score: Int) -> String { "\(score)% \(strings.matchWord)" }
+    func selectedText(_ count: Int) -> String {
+        lang == .ko ? "\(count)개 선택됨 · \(strings.minSelect)" : "\(count) selected · \(strings.minSelect)"
+    }
+    func citedText(_ n: Int) -> String { lang == .ko ? "\(strings.citationsUnit) \(n)" : "\(n) \(strings.citationsUnit)" }
+    func readTimeText(_ minutes: Int) -> String { lang == .ko ? "\(minutes)\(strings.minReadUnit)" : "\(minutes) \(strings.minReadUnit)" }
+    func topicLabel(_ canonical: String) -> String { Topics.label(canonical, lang) }
+    func tagLabel(_ tag: String) -> String { Tags.label(tag, lang) }
+    func relativeDate(_ ls: LocalizedString) -> String { ls(lang) }
+
+    // Weekly summary chrome
+    var weekRangeText: String { lang == .ko ? "7월 3일 – 7월 9일" : "Jul 3 – Jul 9" }
+    var streakText: String { lang == .ko ? "5일" : "5 days" }
+    var highlightMetaText: String { lang == .ko ? "가장 오래 읽은 논문 · 27분" : "Longest read · 27 min" }
 
     // MARK: Feed loading
 

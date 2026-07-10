@@ -40,7 +40,7 @@ enum SampleData {
             year: "2026",
             citations: 14,
             readMinutes: 12,
-            reason: "회원님이 저장한 **‘RAG 인용 신뢰도’** 논문과 방법론이 유사하고, 자주 읽는 ACL 계열이에요."
+            reason: LocalizedString("회원님이 저장한 **‘RAG 인용 신뢰도’** 논문과 방법론이 유사하고, 자주 읽는 ACL 계열이에요.", "Similar in method to **“RAG citation faithfulness,”** a paper you saved — and from ACL, which you read often.")
         ),
         Paper(
             id: "reading-flows",
@@ -62,7 +62,7 @@ enum SampleData {
             year: "2026",
             citations: 6,
             readMinutes: 9,
-            reason: "회원님이 저장한 **읽기 경험** 관련 논문과 주제가 맞닿아 있고, 자주 읽는 CHI 계열이에요."
+            reason: LocalizedString("회원님이 저장한 **읽기 경험** 관련 논문과 주제가 맞닿아 있고, 자주 읽는 CHI 계열이에요.", "Overlaps with the **reading-experience** papers you saved, and it’s from CHI, which you read often.")
         ),
         Paper(
             id: "diffusion-trajectory-reuse",
@@ -84,7 +84,7 @@ enum SampleData {
             year: "2025",
             citations: 21,
             readMinutes: 15,
-            reason: "회원님이 자주 읽는 **생성모델 효율화** 주제와 방법론이 가깝고, 저장한 디퓨전 논문과 이어져요."
+            reason: LocalizedString("회원님이 자주 읽는 **생성모델 효율화** 주제와 방법론이 가깝고, 저장한 디퓨전 논문과 이어져요.", "Close to the **generative-efficiency** topics you read often, and it follows the diffusion paper you saved.")
         )
     ]
 
@@ -92,21 +92,21 @@ enum SampleData {
     // Each row carries a full Paper, so tapping any row opens the detail screen.
 
     static let toRead: [LibraryItem] = [
-        LibraryItem(paper: libEMNLP, relativeDate: "2일 전", progress: 62),
-        LibraryItem(paper: libICLR,  relativeDate: "4일 전", progress: 28),
-        LibraryItem(paper: libTACL,  relativeDate: "1주 전", progress: nil),
-        LibraryItem(paper: libCVPR,  relativeDate: "1주 전", progress: nil)
+        LibraryItem(paper: libEMNLP, relativeDate: LocalizedString("2일 전", "2 days ago"), progress: 62),
+        LibraryItem(paper: libICLR,  relativeDate: LocalizedString("4일 전", "4 days ago"), progress: 28),
+        LibraryItem(paper: libTACL,  relativeDate: LocalizedString("1주 전", "1 week ago"), progress: nil),
+        LibraryItem(paper: libCVPR,  relativeDate: LocalizedString("1주 전", "1 week ago"), progress: nil)
     ]
 
     static let saved: [LibraryItem] = [
-        LibraryItem(paper: feed[0], relativeDate: "오늘",   progress: nil),
-        LibraryItem(paper: feed[1], relativeDate: "1일 전", progress: nil),
-        LibraryItem(paper: feed[2], relativeDate: "3일 전", progress: nil)
+        LibraryItem(paper: feed[0], relativeDate: LocalizedString("오늘", "Today"),    progress: nil),
+        LibraryItem(paper: feed[1], relativeDate: LocalizedString("1일 전", "1 day ago"), progress: nil),
+        LibraryItem(paper: feed[2], relativeDate: LocalizedString("3일 전", "3 days ago"), progress: nil)
     ]
 
     static let done: [LibraryItem] = [
-        LibraryItem(paper: libNAACL, relativeDate: "5일 전", progress: 100),
-        LibraryItem(paper: libICML,  relativeDate: "1주 전", progress: 100)
+        LibraryItem(paper: libNAACL, relativeDate: LocalizedString("5일 전", "5 days ago"), progress: 100),
+        LibraryItem(paper: libICML,  relativeDate: LocalizedString("1주 전", "1 week ago"), progress: 100)
     ]
 
     // Full records for library-only papers (not in today's feed).
@@ -124,7 +124,7 @@ enum SampleData {
         abstractKO: "장문 요약의 사실성을 평가하기 위해, 원본 문서에서 지식 그래프를 구성하고 요약의 각 주장이 그래프 상의 경로로 뒷받침되는지 확인하는 지표를 제안한다. n-그램·함의 기반 기준선과 비교해, 제안 지표는 환각된 관계를 더 정확히 짚어내고 세 개의 벤치마크에서 사람의 사실성 판단과 더 강하게 상관했다.",
         detailTags: ["#사실성", "#요약", "#지식그래프", "#평가"],
         year: "2025", citations: 9, readMinutes: 11,
-        reason: "회원님이 저장한 **요약 사실성** 논문과 방법이 맞닿아 있어요."
+        reason: LocalizedString("회원님이 저장한 **요약 사실성** 논문과 방법이 맞닿아 있어요.", "In line with the **summary-factuality** papers you saved.")
     )
     private static let libICLR = Paper(
         id: "iclr-representation-collapse", venue: "ICLR 2026", venueDetail: "ICLR 2026 · POSTER",
@@ -140,7 +140,7 @@ enum SampleData {
         abstractKO: "소규모 데이터에서 대조 학습은 유용한 구조를 잃고 저계급 표현으로 붕괴하는 경우가 많다. 학습 중 특징 공간의 유효 차원을 유지하는 가벼운 부피 보존 정규화를 제안한다. 네 개의 저데이터 벤치마크에서 연산 부담을 거의 늘리지 않으면서 다운스트림 정확도를 높였다.",
         detailTags: ["#대조학습", "#표현학습", "#정규화", "#저데이터"],
         year: "2026", citations: 3, readMinutes: 10,
-        reason: "자주 읽으시는 **표현 학습** 주제와 이어지는 최신 ICLR 논문이에요."
+        reason: LocalizedString("자주 읽으시는 **표현 학습** 주제와 이어지는 최신 ICLR 논문이에요.", "A recent ICLR paper that follows the **representation-learning** topics you read often.")
     )
     private static let libTACL = Paper(
         id: "tacl-anchor-crosslingual", venue: "TACL 2025", venueDetail: "TACL 2025",
@@ -156,7 +156,7 @@ enum SampleData {
         abstractKO: "교차언어 임베딩 정렬은 매핑 학습에 쓰는 앵커 단어 선택에 민감하다. 빈도 대신 언어 간 상호정보량으로 앵커를 고르는 방법을 제안하며, 저자원 언어에서 더 안정적인 정렬을 얻고 이중언어 사전 추출을 최대 6점 향상시켰다.",
         detailTags: ["#다국어", "#임베딩", "#정렬", "#저자원"],
         year: "2025", citations: 5, readMinutes: 8,
-        reason: "**다국어 임베딩**은 회원님이 관심 표시한 분야와 겹쳐요."
+        reason: LocalizedString("**다국어 임베딩**은 회원님이 관심 표시한 분야와 겹쳐요.", "**Multilingual embeddings** overlap with the fields you flagged.")
     )
     private static let libCVPR = Paper(
         id: "cvpr-video-diffusion-temporal", venue: "CVPR 2025", venueDetail: "CVPR 2025 · HIGHLIGHT",
@@ -172,7 +172,7 @@ enum SampleData {
         abstractKO: "비디오 디퓨전 모델은 시간에 따라 깜빡이는, 시간적으로 일관되지 않은 프레임을 만들곤 한다. 인접 프레임 간 예측 노이즈를 정렬하는 시간적 일관성 정규화를 추가해, 프레임별 충실도를 유지하면서 지각되는 깜빡임을 3분의 1로 줄였다. 기본 구조 변경 없이 손실만 추가하면 되는 방식이다.",
         detailTags: ["#비디오", "#디퓨전", "#일관성", "#생성"],
         year: "2025", citations: 12, readMinutes: 13,
-        reason: "저장하신 **디퓨전** 논문과 계열이 같아요."
+        reason: LocalizedString("저장하신 **디퓨전** 논문과 계열이 같아요.", "Same line as the **diffusion** paper you saved.")
     )
     private static let libNAACL = Paper(
         id: "naacl-retrieval-calibration", venue: "NAACL 2025", venueDetail: "NAACL 2025 · LONG PAPER",
@@ -188,7 +188,7 @@ enum SampleData {
         abstractKO: "검색기의 신뢰도를 보정해, 근거가 약할 때 질의응답 모델이 답변을 보류할 수 있게 한다. 보정된 보류는 오픈도메인 QA에서 자신 있게 틀린 답을 31% 줄이면서도 답변 커버리지를 높게 유지해, 위험도가 큰 상황에서 더 충실한 시스템을 만든다.",
         detailTags: ["#검색증강", "#QA", "#신뢰도", "#보정"],
         year: "2025", citations: 18, readMinutes: 12,
-        reason: "자주 읽으시는 **RAG/QA 신뢰도** 주제의 핵심 논문이에요."
+        reason: LocalizedString("자주 읽으시는 **RAG/QA 신뢰도** 주제의 핵심 논문이에요.", "A key paper on the **RAG/QA faithfulness** topics you read often.")
     )
     private static let libICML = Paper(
         id: "icml-sparse-mixtures-attention", venue: "ICML 2025", venueDetail: "ICML 2025 · POSTER",
@@ -204,7 +204,7 @@ enum SampleData {
         abstractKO: "장문맥 어텐션은 모든 토큰이 서로를 참조해 비용이 크다. 각 쿼리를 문맥의 일부를 담당하는 소수의 어텐션 전문가로 라우팅해, 32k 토큰에서 어텐션 연산을 4배 줄이면서도 장문서 벤치마크에서 밀집 어텐션 품질에 필적했다.",
         detailTags: ["#효율화", "#어텐션", "#장문맥", "#MoE"],
         year: "2025", citations: 24, readMinutes: 14,
-        reason: "**효율화** 계열로, 자주 읽으시는 주제와 잘 맞아요."
+        reason: LocalizedString("**효율화** 계열로, 자주 읽으시는 주제와 잘 맞아요.", "An **efficiency** paper that fits the topics you read often.")
     )
 
     // MARK: Weekly summary

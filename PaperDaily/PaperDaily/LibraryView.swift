@@ -12,7 +12,7 @@ struct LibraryView: View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
 
-                Text("라이브러리")
+                Text(app.strings.libTitle)
                     .font(AppFont.serif(30, .medium))
                     .tracking(-0.6)
                     .foregroundStyle(Palette.ink)
@@ -26,7 +26,7 @@ struct LibraryView: View {
                         Button {
                             withAnimation(.easeInOut(duration: 0.24)) { tab = t }
                         } label: {
-                            Text(t.label)
+                            Text(t.label(app.strings))
                                 .font(AppFont.sans(15, active ? .semibold : .medium))
                                 .foregroundStyle(active ? Palette.ink : Palette.faint2)
                                 .padding(.bottom, 12)
@@ -74,6 +74,7 @@ struct LibraryView: View {
 // MARK: - Library row
 
 struct LibraryRow: View {
+    @EnvironmentObject var app: AppState
     let item: LibraryItem
 
     var body: some View {
@@ -83,7 +84,7 @@ struct LibraryRow: View {
                     .font(AppFont.mono(11))
                     .foregroundStyle(Palette.tagText)
                 Spacer()
-                Text(item.relativeDate)
+                Text(app.relativeDate(item.relativeDate))
                     .font(AppFont.mono(11))
                     .foregroundStyle(Palette.dateWeak)
             }
@@ -99,7 +100,7 @@ struct LibraryRow: View {
 
             HStack(spacing: 10) {
                 ProgressTrack(value: Double(item.progress ?? 0) / 100, height: 8)
-                Text(item.progress.map { "\($0)%" } ?? "시작 전")
+                Text(item.progress.map { "\($0)%" } ?? app.strings.notStarted)
                     .font(AppFont.mono(11))
                     .foregroundStyle(Palette.tagText)
                     .frame(minWidth: 34, alignment: .trailing)

@@ -24,7 +24,7 @@ struct PaperDetailView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("← 오늘의 추천")
+                    Text("← \(app.strings.detailBack)")
                         .font(AppFont.sans(14, .semibold))
                         .foregroundStyle(Palette.muted)
                 }
@@ -32,7 +32,7 @@ struct PaperDetailView: View {
 
                 Spacer()
 
-                Text("공유")
+                Text(app.strings.detailShare)
                     .font(AppFont.sans(14, .medium))
                     .foregroundStyle(Palette.faint2)
             }
@@ -48,7 +48,7 @@ struct PaperDetailView: View {
                             .font(AppFont.mono(11))
                             .tracking(0.44)
                             .foregroundStyle(Palette.accentDeep)
-                        Text(translated ? "한국어 번역본" : "EN 원문")
+                        Text(translated ? app.strings.flagTranslated : app.strings.flagOriginal)
                             .font(AppFont.mono(10, .medium))
                             .foregroundStyle(Palette.tagText)
                             .padding(.horizontal, 7)
@@ -78,8 +78,8 @@ struct PaperDetailView: View {
                     // 메타 행
                     HStack(spacing: 16) {
                         Text(paper.year)
-                        Text("인용 \(paper.citations)")
-                        Text("\(paper.readMinutes)분 읽기")
+                        Text(app.citedText(paper.citations))
+                        Text(app.readTimeText(paper.readMinutes))
                     }
                     .font(AppFont.mono(12))
                     .foregroundStyle(Palette.tagText)
@@ -91,13 +91,13 @@ struct PaperDetailView: View {
                     // 액션 버튼
                     HStack(spacing: 10) {
                         PrimaryButton(
-                            title: app.isSaved(paper.id) ? "저장됨" : "저장하기",
+                            title: app.isSaved(paper.id) ? app.strings.detailSaved : app.strings.detailSave,
                             height: 50, radius: 14
                         ) {
                             app.toggleSaved(paper.id)
                         }
                         OutlineButton(
-                            title: app.isRead(paper.id) ? "읽음 ✓" : "읽음 표시",
+                            title: app.isRead(paper.id) ? app.strings.markedRead : app.strings.markRead,
                             height: 50, radius: 14
                         ) {
                             app.toggleRead(paper.id)
@@ -108,7 +108,7 @@ struct PaperDetailView: View {
 
                     // 초록 섹션 헤더 + 토글
                     HStack {
-                        Text(translated ? "초록 · 번역본" : "ABSTRACT")
+                        Text(translated ? app.strings.absTranslated : app.strings.absLabel)
                             .font(AppFont.mono(11))
                             .tracking(0.88)
                             .foregroundStyle(Palette.sectionLabel)
@@ -116,7 +116,7 @@ struct PaperDetailView: View {
                         Button {
                             translated.toggle()
                         } label: {
-                            Text(translated ? "원문 보기" : "번역본 보기")
+                            Text(translated ? app.strings.showOriginal : app.strings.showTranslation)
                                 .font(AppFont.sans(12.5, .semibold))
                                 .foregroundStyle(Palette.accentDeep)
                                 .padding(.horizontal, 13)
@@ -139,17 +139,17 @@ struct PaperDetailView: View {
 
                     // 태그
                     FlowLayout(hSpacing: 6, vSpacing: 6) {
-                        ForEach(paper.detailTags, id: \.self) { PillTag(text: $0) }
+                        ForEach(paper.detailTags, id: \.self) { PillTag(text: app.tagLabel($0)) }
                     }
                     .padding(.bottom, 22)
 
                     // 왜 추천했나요?
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("왜 추천했나요?")
+                        Text(app.strings.reasonLabel)
                             .font(AppFont.mono(11))
                             .tracking(0.44)
                             .foregroundStyle(Palette.accentDeep)
-                        Text(LocalizedStringKey(paper.reason))   // 마크다운 볼드(**...**) 렌더링
+                        Text(LocalizedStringKey(paper.reason(app.lang)))   // 마크다운 볼드(**...**) 렌더링
                             .font(AppFont.sans(14))
                             .foregroundStyle(Palette.reasonInk)
                             .lineHeight(1.55, fontSize: 14)

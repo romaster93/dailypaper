@@ -4,18 +4,19 @@
 import SwiftUI
 
 struct WeeklySummaryView: View {
+    @EnvironmentObject var app: AppState
     private let stats = SampleData.weekly
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
 
-                Text(stats.dateRange)
+                Text(app.weekRangeText)
                     .font(AppFont.mono(12))
                     .tracking(0.48)
                     .foregroundStyle(Palette.accentDeep)
                     .padding(.bottom, 8)
-                Text("이번 주 요약")
+                Text(app.strings.weekTitle)
                     .font(AppFont.serif(30, .medium))
                     .tracking(-0.6)
                     .foregroundStyle(Palette.ink)
@@ -23,19 +24,19 @@ struct WeeklySummaryView: View {
 
                 // 통계 카드 3개
                 HStack(spacing: 11) {
-                    StatCard(number: "\(stats.read)", label: "읽음", accent: false)
-                    StatCard(number: "\(stats.saved)", label: "저장", accent: false)
-                    StatCard(number: stats.streak, label: "연속", accent: true)
+                    StatCard(number: "\(stats.read)", label: app.strings.statRead, accent: false)
+                    StatCard(number: "\(stats.saved)", label: app.strings.statSaved, accent: false)
+                    StatCard(number: app.streakText, label: app.strings.statStreak, accent: true)
                 }
                 .padding(.bottom, 28)
 
                 // 주제 분포
-                SectionLabel(text: "주제 분포")
+                SectionLabel(text: app.strings.topicDist)
                     .padding(.bottom, 16)
                 VStack(spacing: 14) {
                     ForEach(stats.topics) { topic in
                         HStack(spacing: 12) {
-                            Text(topic.label)
+                            Text(app.topicLabel(topic.label))
                                 .font(AppFont.sans(13))
                                 .foregroundStyle(Palette.body)
                                 .frame(width: 72, alignment: .leading)
@@ -50,10 +51,10 @@ struct WeeklySummaryView: View {
                 .padding(.bottom, 30)
 
                 // 이번 주 하이라이트
-                SectionLabel(text: "이번 주 하이라이트")
+                SectionLabel(text: app.strings.highlightLabel)
                     .padding(.bottom, 14)
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(stats.highlight.subtitle)
+                    Text(app.highlightMetaText)
                         .font(AppFont.mono(11))
                         .foregroundStyle(Palette.tagText)
                         .padding(.bottom, 8)
