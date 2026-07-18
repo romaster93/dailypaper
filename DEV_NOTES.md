@@ -52,6 +52,7 @@ xcrun simctl io booted screenshot out.png
 | `PD_REVIEW=1` | 첫 논문 상세를 거쳐 **네이티브 리뷰 리더로 바로 진입** (샘플 마크다운 자동 부착) |
 | `PD_REVIEW_SEC=<n>` | 리더 로드 후 섹션 n(0-기준)으로 자동 스크롤 — 상태 B(리딩 헤더/본문) 캡처용 |
 | `PD_INTERESTS_OVERRIDE=VLN[,…]` | 관심 분야 강제 (부팅 중 `spawn defaults write`는 cfprefsd 캐시 레이스로 불신뢰 — 이 훅 사용) |
+| `PD_STATS_DETAIL=1` | 통계 탭의 하이라이트 논문 상세를 자동 push (통계 네비게이션 검증용) |
 > ⚠️ `simctl`은 한 셸 스크립트 안에서 연속 launch 시 `SIMCTL_CHILD_*`를 **첫 launch에만** 적용. 화면별로 **개별 명령**(각각 terminate→uninstall→install→launch)으로 캡처할 것. `-KEY value` 런치 인자는 앱에 안 닿음(simctl이 먹음).
 
 ## 4. 코드 구조 (`PaperDaily/PaperDaily/`)
@@ -66,7 +67,8 @@ xcrun simctl io booted screenshot out.png
 - `Components.swift` — `FlowLayout`, 칩/태그/`MatchBadge`/`ProgressTrack`/버튼/`AppTabBar`(점 슬라이드).
 - `MainTabView.swift` — 커스텀 탭 컨테이너(4탭 상시 유지 + 크로스페이드, 영속 탭바, 상세 push 시 탭바 숨김).
 - `OnboardingView.swift` — `LanguageSegment`·`FrequencySegment`·`InterestChip`.
-- `FeedView.swift` · `PaperDetailView.swift` · `LibraryView.swift` · `WeeklySummaryView.swift` · `SettingsView.swift`.
+- `FeedView.swift` · `PaperDetailView.swift`(진입 탭에 맞는 뒤로가기 라벨) · `LibraryView.swift` · `SettingsView.swift`.
+- `WeeklySummaryView.swift` — **주간 요약은 전부 실제 상태에서 파생**: 읽음/저장 개수는 `readIDs`/`savedIDs`, 주제 분포는 저장·읽은 논문의 카테고리 비율(상위 4 + 기타), 하이라이트는 그중 리뷰가 가장 긴 논문(탭 → 상세), 연속 일수는 읽음 처리한 날짜(`PD_READ_DAYS`) 기반. 데이터가 없으면 빈 상태 문구.
 - `ReviewReaderView.swift` — **네이티브 리뷰 리더 (화면 6/7)**: `paper.reviewMarkdownURL`(전처리 마크다운)을 MarkdownUI+SwiftMath로 렌더. 출판 정보/목차 카드, 리딩 헤더(현재 섹션+진행률), 섹션 네비, 수식(파싱 실패 시 serif italic 폴백), 다크 ASCII 다이어그램, 읽기 위치 저장(UserDefaults). 피드에 `reviewMarkdownURL` 필드가 생기면 자동으로 이 리더가 우선됨. 테스트: `PD_REVIEW_SAMPLE=1` + 번들 `SampleReview.md`.
 - `ReviewView.swift` — (과도기) WKWebView 리뷰 리더. `reviewMarkdownURL`이 없고 `reviewURL`만 있을 때 사용. `app=1`을 붙여 로드하면 페이지가 자체 상단 바를 숨김. 웹 리뷰 페이지 디자인은 맥미니 `~/repos/paper-review/scripts/paperdaily-feed/generate.js`가 생성 — 콘텐츠 계약은 [`REVIEW-FORMAT.md`](REVIEW-FORMAT.md).
 - `SplashView.swift` — 테라코타 스플래시(Dancing Script 워드마크 + 로딩바).

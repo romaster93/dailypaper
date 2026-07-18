@@ -13,17 +13,10 @@ struct OnboardingView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
 
-                    // 진행 표시 02 / 03 + 66% 바
-                    HStack(spacing: 12) {
-                        Text("02 / 03")
-                            .font(AppFont.mono(12))
-                            .foregroundStyle(Palette.sectionLabel)
-                        ProgressTrack(value: 0.66, height: 4)
-                    }
-                    .padding(.top, 6)
-                    .padding(.bottom, 30)
-
+                    // 시안의 "02 / 03 · 66%" 진행 표시는 3단계 온보딩 전제였다.
+                    // 실제 온보딩은 이 화면 한 단계뿐이라, 가짜 진행률 대신 생략한다.
                     Text("\(app.strings.obTitle1)\n\(app.strings.obTitle2)")
+                        .padding(.top, 14)
                         .font(AppFont.serif(30, .medium))
                         .tracking(-0.6)
                         .foregroundStyle(Palette.ink)

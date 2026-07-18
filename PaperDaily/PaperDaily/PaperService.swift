@@ -60,7 +60,8 @@ struct RemotePaperService: PaperService {
             data = body
         }
         let feed = try PaperFeed.decode(data)
-        FeedCache.shared.save(data)                    // cache raw bytes on success
+        // 빈 배치는 캐시하지 않는다 — 캐시했다가는 그날 이후로 오프라인 피드가 영구히 빈 화면이 된다.
+        if !feed.papers.isEmpty { FeedCache.shared.save(data) }
         return feed
     }
 }

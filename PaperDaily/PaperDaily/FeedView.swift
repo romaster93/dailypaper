@@ -118,7 +118,7 @@ struct PaperCard: View {
         VStack(alignment: .leading, spacing: 0) {
             // 상단 행: 학회·언어 + 매칭 배지
             HStack {
-                Text("\(paper.venue) · EN")
+                Text("\(paper.venue) · \(paper.feedAbstractLanguage)")
                     .font(AppFont.mono(11))
                     .foregroundStyle(Palette.tagText)
                 Spacer()

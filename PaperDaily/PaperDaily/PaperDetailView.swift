@@ -12,20 +12,35 @@ struct PaperDetailView: View {
 
     @State private var translated: Bool
     @State private var showReview = false
+    /// 뒤로가기 라벨 — 진입한 탭 이름(피드/라이브러리/통계). nil이면 피드 기본값.
+    private let backLabel: String?
 
-    init(paper: Paper, initialTranslated: Bool = false) {
+    init(paper: Paper, initialTranslated: Bool = false, backLabel: String? = nil) {
         self.paper = paper
+        self.backLabel = backLabel
         _translated = State(initialValue: initialTranslated)
+    }
+
+    /// 라이브러리 행 등은 진입 시점의 Paper 복사본을 넘기므로, 리뷰 URL은
+    /// 항상 최신 카탈로그(피드∪아카이브∪샘플)에서 같은 id로 재해석한다.
+    private var resolvedPaper: Paper {
+        app.catalog.first(where: { $0.id == paper.id }) ?? paper
     }
 
     /// 에이전트 리뷰 페이지 URL (있을 때만 "전체 리뷰 보기" 버튼 노출).
     private var reviewURL: URL? {
-        paper.reviewURL.flatMap(URL.init(string:))
+        (paper.reviewURL ?? resolvedPaper.reviewURL).flatMap(URL.init(string:))
     }
 
     /// 전처리된 리뷰 마크다운 URL — 있으면 네이티브 리더가 WKWebView보다 우선.
     private var reviewMarkdownURL: URL? {
-        paper.reviewMarkdownURL.flatMap(URL.init(string:))
+        (paper.reviewMarkdownURL ?? resolvedPaper.reviewMarkdownURL).flatMap(URL.init(string:))
+    }
+
+    private var shareLabel: some View {
+        Text(app.strings.detailShare)
+            .font(AppFont.sans(14, .medium))
+            .foregroundStyle(Palette.accentDeep)
     }
 
     var body: some View {
@@ -35,7 +50,7 @@ struct PaperDetailView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("← \(app.strings.detailBack)")
+                    Text("← \(backLabel ?? app.strings.detailBack)")
                         .font(AppFont.sans(14, .semibold))
                         .foregroundStyle(Palette.muted)
                 }
@@ -43,9 +58,14 @@ struct PaperDetailView: View {
 
                 Spacer()
 
-                Text(app.strings.detailShare)
-                    .font(AppFont.sans(14, .medium))
-                    .foregroundStyle(Palette.faint2)
+                // 리뷰 페이지가 있으면 링크를, 없으면 제목을 공유한다.
+                if let url = reviewURL {
+                    ShareLink(item: url, subject: Text(paper.feedTitle)) { shareLabel }
+                        .buttonStyle(.plain)
+                } else {
+                    ShareLink(item: paper.feedTitle) { shareLabel }
+                        .buttonStyle(.plain)
+                }
             }
             .frame(height: 46)
             .padding(.horizontal, 24)
@@ -126,18 +146,21 @@ struct PaperDetailView: View {
                             .tracking(0.88)
                             .foregroundStyle(Palette.sectionLabel)
                         Spacer()
-                        Button {
-                            translated.toggle()
-                        } label: {
-                            Text(translated ? app.strings.showOriginal : app.strings.showTranslation)
-                                .font(AppFont.sans(12.5, .semibold))
-                                .foregroundStyle(Palette.accentDeep)
-                                .padding(.horizontal, 13)
-                                .padding(.vertical, 6)
-                                .background(Palette.accentSoftBg, in: Capsule())
-                                .overlay(Capsule().strokeBorder(Palette.accentSoftBorder2, lineWidth: 1))
+                        // 번역본이 실제로 없으면 토글을 감춘다 — 눌러도 같은 원문이 다시 나온다.
+                        if paper.hasTranslation {
+                            Button {
+                                translated.toggle()
+                            } label: {
+                                Text(translated ? app.strings.showOriginal : app.strings.showTranslation)
+                                    .font(AppFont.sans(12.5, .semibold))
+                                    .foregroundStyle(Palette.accentDeep)
+                                    .padding(.horizontal, 13)
+                                    .padding(.vertical, 6)
+                                    .background(Palette.accentSoftBg, in: Capsule())
+                                    .overlay(Capsule().strokeBorder(Palette.accentSoftBorder2, lineWidth: 1))
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                     .padding(.bottom, 12)
 

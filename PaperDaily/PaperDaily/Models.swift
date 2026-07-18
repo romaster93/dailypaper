@@ -59,6 +59,23 @@ struct Paper: Identifiable, Hashable {
     /// WKWebView(reviewURL) 대신 사용된다. 피드가 필드를 아직 안 주는 동안은 nil.
     var reviewMarkdownURL: String? = nil
 
+    /// 번역본이 실제로 존재하는가. 생성기는 번역이 없으면 KO 필드에 원문을 그대로 넣으므로
+    /// (titleKO == titleEN), 이를 확인하지 않으면 "번역본 보기"가 같은 영문을 다시 보여준다.
+    var hasTranslation: Bool {
+        detailTitleKO != detailTitleEN || authorsKO != authorsEN || abstractKO != abstractEN
+    }
+
+    /// 카드에 실제로 렌더되는 초록의 언어 표기. 실피드는 한국어 요약, 샘플은 영문이라
+    /// "EN"을 고정으로 쓰면 한국어 본문 위에 EN이 붙는다.
+    var feedAbstractLanguage: String {
+        let hasHangul = feedAbstract.unicodeScalars.contains { scalar in
+            (0xAC00...0xD7A3).contains(scalar.value)   // 음절
+                || (0x1100...0x11FF).contains(scalar.value)   // 자모
+                || (0x3130...0x318F).contains(scalar.value)   // 호환 자모
+        }
+        return hasHangul ? "KO" : "EN"
+    }
+
     func title(translated: Bool) -> String { translated ? detailTitleKO : detailTitleEN }
     func authors(translated: Bool) -> String { translated ? authorsKO : authorsEN }
     func abstract(translated: Bool) -> String { translated ? abstractKO : abstractEN }
@@ -77,23 +94,9 @@ struct LibraryItem: Identifiable, Hashable {
 // MARK: - Weekly summary
 
 struct TopicShare: Identifiable, Hashable {
-    let id = UUID().uuidString
+    /// 카테고리명이 곧 식별자 — 매 렌더마다 새 UUID가 생기면 ForEach 애니메이션이 튄다.
+    var id: String { label }
     let label: String
     let percent: Int
     let opacity: Double
-}
-
-struct Highlight: Hashable {
-    let subtitle: String    // "가장 오래 읽은 논문 · 27분"
-    let title: String
-    let meta: String        // "J. Kim +4 · ACL 2026"
-}
-
-struct WeeklyStats {
-    let dateRange: String
-    let read: Int
-    let saved: Int
-    let streak: String      // "5일"
-    let topics: [TopicShare]
-    let highlight: Highlight
 }

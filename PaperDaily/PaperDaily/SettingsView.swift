@@ -39,7 +39,8 @@ struct SettingsView: View {
                 SectionLabel(text: app.strings.interestsLabel)
                     .padding(.bottom, 12)
                 FlowLayout(hSpacing: 10, vSpacing: 10) {
-                    ForEach(SampleData.allInterests, id: \.self) { interest in
+                    // 온보딩과 동일 소스 — 실피드가 있으면 실제 카테고리(VLN/Planner…) (4-1)
+                    ForEach(app.availableInterests, id: \.self) { interest in
                         InterestChip(
                             title: app.topicLabel(interest),
                             selected: app.interests.contains(interest)
@@ -51,12 +52,11 @@ struct SettingsView: View {
                 .padding(.bottom, 30)
 
                 // 계정 / 정보
+                // 알림 행은 뺐다 — 앱에 알림 코드가 없는데 "매일 아침"이라고 표기하면 거짓이다.
                 VStack(spacing: 0) {
-                    settingsRow(title: app.strings.setNotif, value: freqNotice)
-                    Divider().background(Palette.divider)
                     settingsRow(title: app.strings.setTransLang, value: app.lang == .ko ? "한국어" : "Korean")
                     Divider().background(Palette.divider)
-                    settingsRow(title: app.strings.setSource, value: "arXiv · Semantic Scholar")
+                    settingsRow(title: app.strings.setSource, value: sourceValue)
                 }
                 .background(Palette.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay(
@@ -87,12 +87,12 @@ struct SettingsView: View {
         }
     }
 
-    private var freqNotice: String {
-        switch app.frequency {
-        case .daily:   app.strings.notifDaily
-        case .weekly:  app.strings.notifWeekly
-        case .monthly: app.strings.notifMonthly
+    /// 실제로 논문을 가져오는 곳 — 원격 피드 호스트, 폴백 중이면 내장 샘플.
+    private var sourceValue: String {
+        guard app.showingRemoteFeed else {
+            return LocalizedString("내장 샘플", "Bundled sample")(app.lang)
         }
+        return Config.feedURL?.host ?? LocalizedString("설정된 피드", "Configured feed")(app.lang)
     }
 
     private func settingsRow(title: String, value: String) -> some View {

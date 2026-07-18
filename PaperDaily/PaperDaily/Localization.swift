@@ -47,7 +47,7 @@ struct Strings {
     let libTitle, libTab1, libTab2, libTab3, notStarted: String
     let remove, emptyToRead, emptySaved, emptyDone: String
     // Weekly summary
-    let weekTitle, statRead, statSaved, statStreak, topicDist, highlightLabel: String
+    let weekTitle, statRead, statSaved, statStreak, topicDist, highlightLabel, emptyWeekly: String
     // Settings
     let settingsTitle, setLanguage, setNotif, setTransLang, setSource, replayOnboarding: String
     let notifDaily, notifWeekly, notifMonthly: String
@@ -78,6 +78,7 @@ struct Strings {
         remove: "삭제", emptyToRead: "읽을 논문이 없어요.", emptySaved: "저장한 논문이 없어요.", emptyDone: "완료한 논문이 없어요.",
         weekTitle: "이번 주 요약", statRead: "읽음", statSaved: "저장", statStreak: "연속",
         topicDist: "주제 분포", highlightLabel: "이번 주 하이라이트",
+        emptyWeekly: "저장하거나 읽은 논문이 쌓이면 여기에 요약이 나타나요.",
         settingsTitle: "설정", setLanguage: "언어", setNotif: "알림", setTransLang: "번역 언어",
         setSource: "논문 소스", replayOnboarding: "온보딩 다시 보기",
         notifDaily: "매일 아침", notifWeekly: "매주 월요일", notifMonthly: "매달 1일",
@@ -106,6 +107,7 @@ struct Strings {
         remove: "Remove", emptyToRead: "Nothing to read yet.", emptySaved: "No saved papers yet.", emptyDone: "No finished papers yet.",
         weekTitle: "This week", statRead: "Read", statSaved: "Saved", statStreak: "Streak",
         topicDist: "TOPIC MIX", highlightLabel: "HIGHLIGHT OF THE WEEK",
+        emptyWeekly: "Save or finish a few papers and your summary will appear here.",
         settingsTitle: "Settings", setLanguage: "Language", setNotif: "Notifications", setTransLang: "Translation",
         setSource: "Paper source", replayOnboarding: "Replay onboarding",
         notifDaily: "Every morning", notifWeekly: "Every Monday", notifMonthly: "1st of each month",
@@ -151,12 +153,12 @@ struct FeedHeaderText {
 
     static func of(_ lang: AppLanguage, _ freq: Frequency) -> FeedHeaderText {
         switch (lang, freq) {
-        case (.ko, .daily):   return .init(date: "2026. 7. 9  수요일", title: "오늘의 추천",  subtitle: "관심 분야에서 고른 5편 · 평균 정합성 92%",  hint: "매일 아침 새 논문 5편을 받아요.")
-        case (.ko, .weekly):  return .init(date: "2026 · 28주차",       title: "이번 주 추천", subtitle: "관심 분야에서 고른 12편 · 평균 정합성 92%", hint: "매주 월요일 아침 12편을 받아요.")
-        case (.ko, .monthly): return .init(date: "2026. 7월",           title: "이번 달 추천", subtitle: "관심 분야에서 고른 30편 · 평균 정합성 92%", hint: "매달 1일 30편을 받아요.")
-        case (.en, .daily):   return .init(date: "Wed, Jul 9, 2026", title: "Today’s picks",       subtitle: "Curated 5 from your fields · avg. 92% match",  hint: "You’ll get 5 fresh papers every morning.")
-        case (.en, .weekly):  return .init(date: "Week 28 · 2026",   title: "This week’s picks",   subtitle: "Curated 12 from your fields · avg. 92% match", hint: "You’ll get 12 papers every Monday morning.")
-        case (.en, .monthly): return .init(date: "July 2026",        title: "This month’s picks",  subtitle: "Curated 30 from your fields · avg. 92% match", hint: "You’ll get 30 papers on the 1st of each month.")
+        case (.ko, .daily):   return .init(date: "2026. 7. 9  수요일", title: "오늘의 추천",  subtitle: "관심 분야에서 고른 5편 · 평균 정합성 92%",  hint: "매일 아침 새로 올라온 리뷰를 받아요.")
+        case (.ko, .weekly):  return .init(date: "2026 · 28주차",       title: "이번 주 추천", subtitle: "관심 분야에서 고른 12편 · 평균 정합성 92%", hint: "매주 월요일 아침에 모아서 받아요.")
+        case (.ko, .monthly): return .init(date: "2026. 7월",           title: "이번 달 추천", subtitle: "관심 분야에서 고른 30편 · 평균 정합성 92%", hint: "매달 1일에 모아서 받아요.")
+        case (.en, .daily):   return .init(date: "Wed, Jul 9, 2026", title: "Today’s picks",       subtitle: "Curated 5 from your fields · avg. 92% match",  hint: "You’ll get the newest reviews each morning.")
+        case (.en, .weekly):  return .init(date: "Week 28 · 2026",   title: "This week’s picks",   subtitle: "Curated 12 from your fields · avg. 92% match", hint: "You’ll get them together on Monday mornings.")
+        case (.en, .monthly): return .init(date: "July 2026",        title: "This month’s picks",  subtitle: "Curated 30 from your fields · avg. 92% match", hint: "You’ll get them together on the 1st of each month.")
         }
     }
 }
