@@ -28,7 +28,7 @@
   <img src="PaperDaily/screenshots/04_detail_ko_translated.png" width="165"/>
   <img src="PaperDaily/screenshots/05_library.png" width="165"/>
   <img src="PaperDaily/screenshots/06_weekly_summary.png" width="165"/>
-  <img src="PaperDaily/screenshots/00_app_icon_on_home.png" width="165"/>
+  <img src="PaperDaily/screenshots/07_review_reader.png" width="165"/>
 </p>
 
 ## ✨ Features
@@ -48,12 +48,10 @@
 네비게이션, 수식 렌더링, 표·그림·아키텍처 다이어그램 트리트먼트를 갖춘 전용 리더로 읽습니다.
 
 <p align="center">
-  <img src="PaperDaily/screenshots/07_review_reader.png" width="210"/>
-  &nbsp;&nbsp;
-  <img src="PaperDaily/screenshots/08_review_body.png" width="210"/>
+  <img src="PaperDaily/screenshots/08_review_body.png" width="230"/>
 </p>
 
-> 위 두 화면은 **네이티브 리더**(MarkdownUI + SwiftMath)이며, 번들된 샘플 리뷰로 시연한 것입니다.
+> 이 화면은 **네이티브 리더**(MarkdownUI + SwiftMath)이며, 번들된 샘플 리뷰로 시연한 것입니다.
 > 피드가 `reviewMarkdownURL` 필드를 내보내기 전까지는 앱이 [웹 리뷰 페이지](https://romaster93.github.io/paperdaily-feed/)를
 > 리더 안에서 띄우고, 필드가 생기면 자동으로 네이티브 리더로 전환됩니다.
 
