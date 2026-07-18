@@ -55,6 +55,10 @@ struct Paper: Identifiable, Hashable {
     /// (`var` + 기본값 → memberwise init에서 생략 가능, 기존 SampleData 호출부 유지.)
     var reviewURL: String? = nil
 
+    /// 전처리된 리뷰 마크다운 URL (file:// 포함). 있으면 네이티브 리더(ReviewReaderView)가
+    /// WKWebView(reviewURL) 대신 사용된다. 피드가 필드를 아직 안 주는 동안은 nil.
+    var reviewMarkdownURL: String? = nil
+
     func title(translated: Bool) -> String { translated ? detailTitleKO : detailTitleEN }
     func authors(translated: Bool) -> String { translated ? authorsKO : authorsEN }
     func abstract(translated: Bool) -> String { translated ? abstractKO : abstractEN }

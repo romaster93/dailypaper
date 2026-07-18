@@ -18,6 +18,16 @@ struct ReviewView: View {
     @State private var loadFailed = false
     @State private var attempt = 0        // bump → reload (retry)
 
+    /// reviewURL + `app=1` — 페이지가 자체 상단 바(뒤로/arXiv 행)를 숨기고 네이티브 바만 남긴다.
+    /// 공유(ShareLink)는 원본 URL 그대로 사용.
+    private var embeddedURL: URL {
+        guard var comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return url }
+        var items = comps.queryItems ?? []
+        items.append(URLQueryItem(name: "app", value: "1"))
+        comps.queryItems = items
+        return comps.url ?? url
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // 상단 바 (뒤로 · 논문 제목 · 공유) — PaperDetailView와 같은 커스텀 바
@@ -49,7 +59,7 @@ struct ReviewView: View {
 
             ZStack(alignment: .top) {
                 ReviewWebView(
-                    url: url,
+                    url: embeddedURL,
                     attempt: attempt,
                     progress: $progress,
                     isLoading: $isLoading,

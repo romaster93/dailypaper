@@ -59,7 +59,8 @@ struct OnboardingView: View {
                     SectionLabel(text: app.strings.interestsLabel)
                         .padding(.bottom, 12)
                     FlowLayout(hSpacing: 10, vSpacing: 10) {
-                        ForEach(SampleData.allInterests, id: \.self) { interest in
+                        // 실피드가 로드돼 있으면 실제 카테고리(VLN/Planner…), 아니면 핸드오프의 목업 토픽 (4-1)
+                        ForEach(app.availableInterests, id: \.self) { interest in
                             InterestChip(
                                 title: app.topicLabel(interest),
                                 selected: app.interests.contains(interest)
@@ -71,7 +72,7 @@ struct OnboardingView: View {
                 }
                 .padding(.horizontal, 26)
                 .padding(.top, 8)
-                .padding(.bottom, 150)
+                .padding(.bottom, 130)   // 스펙: 온보딩 CTA 하단 여백 130
             }
 
             ctaBar

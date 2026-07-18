@@ -122,6 +122,7 @@ private struct DailyFeedDTO: Decodable {
         let reason: String
         let reasonEn: String?
         let reviewURL: String?
+        let reviewMarkdownURL: String?   // optional — 전처리된 리뷰 마크다운 (네이티브 리더용)
 
         func toPaper() -> Paper {
             Paper(
@@ -145,7 +146,8 @@ private struct DailyFeedDTO: Decodable {
                 citations: citations,
                 readMinutes: readMinutes,
                 reason: LocalizedString(reason, reasonEn ?? reason),
-                reviewURL: reviewURL
+                reviewURL: reviewURL,
+                reviewMarkdownURL: reviewMarkdownURL
             )
         }
     }

@@ -23,6 +23,11 @@ struct PaperDetailView: View {
         paper.reviewURL.flatMap(URL.init(string:))
     }
 
+    /// 전처리된 리뷰 마크다운 URL — 있으면 네이티브 리더가 WKWebView보다 우선.
+    private var reviewMarkdownURL: URL? {
+        paper.reviewMarkdownURL.flatMap(URL.init(string:))
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // 뒤로가기 바
@@ -169,7 +174,7 @@ struct PaperDetailView: View {
                     .background(Palette.accentSoftBg, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
 
                     // 전체 리뷰 보기 (에이전트 리뷰가 있는 논문만)
-                    if reviewURL != nil {
+                    if reviewMarkdownURL != nil || reviewURL != nil {
                         PrimaryButton(title: app.strings.readReview, height: 50, radius: 14) {
                             showReview = true
                         }
@@ -184,9 +189,14 @@ struct PaperDetailView: View {
         .background(Palette.appBg.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            if app.consumeLaunchReview() { showReview = true }   // PD_REVIEW=1 테스트 훅
+        }
         .navigationDestination(isPresented: $showReview) {
-            if let url = reviewURL {
-                ReviewView(paper: paper, url: url)
+            if let markdown = reviewMarkdownURL {
+                ReviewReaderView(paper: paper, markdownURL: markdown)   // 네이티브 리더 (화면 6/7)
+            } else if let url = reviewURL {
+                ReviewView(paper: paper, url: url)                      // 과도기: 웹 리뷰 페이지
             }
         }
     }
