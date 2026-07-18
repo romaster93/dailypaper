@@ -15,6 +15,7 @@ struct FeedHeader: Equatable {
 
 struct DailyFeed {
     let papers: [Paper]
+    let archive: [Paper]      // past batches — library resolution only, never shown in the feed
     let header: FeedHeader?   // optional override of the frequency-derived header
 }
 
@@ -59,7 +60,8 @@ struct RemotePaperService: PaperService {
             data = body
         }
         let feed = try PaperFeed.decode(data)
-        FeedCache.shared.save(data)                    // cache raw bytes on success
+        // 빈 배치는 캐시하지 않는다 — 캐시했다가는 그날 이후로 오프라인 피드가 영구히 빈 화면이 된다.
+        if !feed.papers.isEmpty { FeedCache.shared.save(data) }
         return feed
     }
 }
@@ -90,6 +92,7 @@ private struct DailyFeedDTO: Decodable {
     let frequency: String?
     let header: HeaderDTO?
     let papers: [PaperDTO]
+    let archive: [PaperDTO]?   // optional — older feeds have no archive
 
     struct HeaderDTO: Decodable {
         let date: String?
@@ -119,6 +122,8 @@ private struct DailyFeedDTO: Decodable {
         let readMinutes: Int
         let reason: String
         let reasonEn: String?
+        let reviewURL: String?
+        let reviewMarkdownURL: String?   // optional — 전처리된 리뷰 마크다운 (네이티브 리더용)
 
         func toPaper() -> Paper {
             Paper(
@@ -141,7 +146,9 @@ private struct DailyFeedDTO: Decodable {
                 year: year,
                 citations: citations,
                 readMinutes: readMinutes,
-                reason: LocalizedString(reason, reasonEn ?? reason)
+                reason: LocalizedString(reason, reasonEn ?? reason),
+                reviewURL: reviewURL,
+                reviewMarkdownURL: reviewMarkdownURL
             )
         }
     }
@@ -151,6 +158,10 @@ private struct DailyFeedDTO: Decodable {
             guard let h = header, let d = h.date, let t = h.title, let s = h.subtitle else { return nil }
             return FeedHeader(date: d, title: t, subtitle: s)
         }()
-        return DailyFeed(papers: papers.map { $0.toPaper() }, header: mappedHeader)
+        return DailyFeed(
+            papers: papers.map { $0.toPaper() },
+            archive: (archive ?? []).map { $0.toPaper() },
+            header: mappedHeader
+        )
     }
 }

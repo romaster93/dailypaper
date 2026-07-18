@@ -8,7 +8,7 @@ import Foundation
 enum Config {
     /// Production feed URL. Empty → bundled sample data.
     /// e.g. "https://your-host.example.com/paperdaily/daily.json"
-    static let defaultFeedURLString = ""
+    static let defaultFeedURLString = "https://romaster93.github.io/paperdaily-feed/daily.json"
 
     /// Effective feed URL, allowing a runtime override for testing via
     /// `SIMCTL_CHILD_PD_FEED_URL=<url>` (env) or `-PD_FEED_URL <url>` (launch arg).

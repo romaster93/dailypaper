@@ -13,17 +13,10 @@ struct OnboardingView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
 
-                    // 진행 표시 02 / 03 + 66% 바
-                    HStack(spacing: 12) {
-                        Text("02 / 03")
-                            .font(AppFont.mono(12))
-                            .foregroundStyle(Palette.sectionLabel)
-                        ProgressTrack(value: 0.66, height: 4)
-                    }
-                    .padding(.top, 6)
-                    .padding(.bottom, 30)
-
+                    // 시안의 "02 / 03 · 66%" 진행 표시는 3단계 온보딩 전제였다.
+                    // 실제 온보딩은 이 화면 한 단계뿐이라, 가짜 진행률 대신 생략한다.
                     Text("\(app.strings.obTitle1)\n\(app.strings.obTitle2)")
+                        .padding(.top, 14)
                         .font(AppFont.serif(30, .medium))
                         .tracking(-0.6)
                         .foregroundStyle(Palette.ink)
@@ -59,7 +52,8 @@ struct OnboardingView: View {
                     SectionLabel(text: app.strings.interestsLabel)
                         .padding(.bottom, 12)
                     FlowLayout(hSpacing: 10, vSpacing: 10) {
-                        ForEach(SampleData.allInterests, id: \.self) { interest in
+                        // 실피드가 로드돼 있으면 실제 카테고리(VLN/Planner…), 아니면 핸드오프의 목업 토픽 (4-1)
+                        ForEach(app.availableInterests, id: \.self) { interest in
                             InterestChip(
                                 title: app.topicLabel(interest),
                                 selected: app.interests.contains(interest)
@@ -71,7 +65,7 @@ struct OnboardingView: View {
                 }
                 .padding(.horizontal, 26)
                 .padding(.top, 8)
-                .padding(.bottom, 150)
+                .padding(.bottom, 130)   // 스펙: 온보딩 CTA 하단 여백 130
             }
 
             ctaBar

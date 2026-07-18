@@ -124,7 +124,8 @@ struct LibraryRow: View {
 
             HStack(spacing: 10) {
                 ProgressTrack(value: Double(item.progress ?? 0) / 100, height: 8)
-                Text(item.progress.map { "\($0)%" } ?? app.strings.notStarted)
+                // 읽음은 이진 상태다 — 측정한 적 없는 "100%" 대신 "완료"로 표기.
+                Text(item.progress == 100 ? app.strings.libTab3 : (item.progress.map { "\($0)%" } ?? app.strings.notStarted))
                     .font(AppFont.mono(11))
                     .foregroundStyle(Palette.tagText)
                     .frame(minWidth: 34, alignment: .trailing)

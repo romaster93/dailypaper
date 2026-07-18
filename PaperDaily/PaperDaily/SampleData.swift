@@ -210,23 +210,5 @@ enum SampleData {
         reason: LocalizedString("**효율화** 계열로, 자주 읽으시는 주제와 잘 맞아요.", "An **efficiency** paper that fits the topics you read often.")
     )
 
-    // MARK: Weekly summary
-
-    static let weekly = WeeklyStats(
-        dateRange: "7월 3일 – 7월 9일",
-        read: 12,
-        saved: 8,
-        streak: "5일",
-        topics: [
-            TopicShare(label: "자연어처리", percent: 42, opacity: 1.0),
-            TopicShare(label: "생성모델",  percent: 26, opacity: 0.82),
-            TopicShare(label: "HCI",       percent: 20, opacity: 0.64),
-            TopicShare(label: "기타",       percent: 12, opacity: 0.46)
-        ],
-        highlight: Highlight(
-            subtitle: "가장 오래 읽은 논문 · 27분",
-            title: "Grounded Consistency in RAG: Decoding for Citation Faithfulness",
-            meta: "J. Kim +4 · ACL 2026"
-        )
-    )
+    // 주간 요약은 고정 샘플이 아니라 실제 저장/읽음 상태에서 파생된다 (AppState.weekly*).
 }

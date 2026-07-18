@@ -9,11 +9,13 @@ struct MainTabView: View {
     @EnvironmentObject var app: AppState
     @State private var homePath: [Paper] = []
     @State private var libraryPath: [Paper] = []
+    @State private var statsPath: [Paper] = []
 
-    /// A pushed detail (home or library) means the tab bar should hide.
+    /// A pushed detail (home, library or stats) means the tab bar should hide.
     private var detailShowing: Bool {
         (app.selectedTab == .home && !homePath.isEmpty) ||
-        (app.selectedTab == .library && !libraryPath.isEmpty)
+        (app.selectedTab == .library && !libraryPath.isEmpty) ||
+        (app.selectedTab == .stats && !statsPath.isEmpty)
     }
 
     var body: some View {
@@ -62,13 +64,27 @@ struct MainTabView: View {
         NavigationStack(path: $libraryPath) {
             LibraryView()
                 .navigationDestination(for: Paper.self) { paper in
-                    PaperDetailView(paper: paper)
+                    PaperDetailView(paper: paper, backLabel: app.strings.libTitle)
                 }
                 .toolbar(.hidden, for: .navigationBar)
         }
     }
 
-    private var statsTab: some View { WeeklySummaryView() }
+    private var statsTab: some View {
+        NavigationStack(path: $statsPath) {
+            WeeklySummaryView()
+                .navigationDestination(for: Paper.self) { paper in
+                    PaperDetailView(paper: paper, backLabel: app.strings.weekTitle)
+                }
+                .toolbar(.hidden, for: .navigationBar)
+        }
+        .task {
+            // 테스트 훅: 하이라이트 상세 자동 진입 (피드 로드 후 하이라이트가 정해지므로 task에서)
+            guard app.launchStatsDetail, statsPath.isEmpty else { return }
+            await app.loadFeedIfNeeded()
+            if let highlight = app.weeklyHighlight { statsPath = [highlight] }
+        }
+    }
 
     private var settingsTab: some View { SettingsView() }
 }

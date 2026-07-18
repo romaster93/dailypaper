@@ -1,13 +1,13 @@
 # DEV NOTES — 이어서 작업하기 위한 핸드오프
 
 > 다른 컴퓨터에서 `git clone` 후 이 문서만 읽으면 이어서 작업할 수 있도록 정리한 개발 노트입니다.
-> (사용자용 소개는 [`README.md`](README.md), 디자인 명세는 [`DESIGN.md`](DESIGN.md), 출시는 [`PaperDaily/RELEASE.md`](PaperDaily/RELEASE.md).)
+> (사용자용 소개는 [`README.md`](README.md), 디자인 명세는 [`DESIGN.md`](DESIGN.md), 리뷰 마크다운 양식은 [`REVIEW-FORMAT.md`](REVIEW-FORMAT.md), 출시는 [`PaperDaily/RELEASE.md`](PaperDaily/RELEASE.md).)
 
 ## 1. 이게 뭔가
 `논문 데일리 · Daily Papers` — 대학원생/연구자용 **매일 논문 추천 iOS 앱**. 디자인 핸드오프를 **네이티브 SwiftUI**로 재구현.
-화면: 스플래시 → 온보딩 → 추천 피드 → 논문 상세(원문/번역 토글) → 라이브러리 → 주간 요약 → 설정. **한국어/영어 UI 전환** 지원.
+화면: 스플래시 → 온보딩 → 추천 피드 → 논문 상세(원문/번역 토글) → 상세 리뷰(에이전트 리뷰 뷰어) → 라이브러리 → 주간 요약 → 설정. **한국어/영어 UI 전환** 지원.
 
-- 플랫폼: **iOS 17+**, 순수 SwiftUI, 외부 패키지 없음.
+- 플랫폼: **iOS 17+**, SwiftUI. 외부 패키지(SPM) 2개: **MarkdownUI**(swift-markdown-ui 2.4.x, 리뷰 마크다운 렌더) + **SwiftMath**(1.7.x, 수식 렌더) — 네이티브 리뷰 리더 전용.
 - Xcode 프로젝트: `PaperDaily/PaperDaily.xcodeproj` (Xcode 16+ 파일시스템 동기화 그룹 방식).
 
 ## 2. 새 맥에서 개발 환경 세팅
@@ -48,11 +48,16 @@ xcrun simctl io booted screenshot out.png
 | `PD_HOLD_SPLASH=1` | 스플래시 유지 (캡처용) |
 | `PD_SEED_SAVED=1` | 저장됨 탭에 논문 2편 시드 |
 | `PD_LIB_TAB=toRead\|saved\|done` | 라이브러리 초기 탭 |
+| `PD_REVIEW_SAMPLE=1` | 첫 피드 논문에 번들 `SampleReview.md`를 붙여 네이티브 리뷰 리더 진입 가능 |
+| `PD_REVIEW=1` | 첫 논문 상세를 거쳐 **네이티브 리뷰 리더로 바로 진입** (샘플 마크다운 자동 부착) |
+| `PD_REVIEW_SEC=<n>` | 리더 로드 후 섹션 n(0-기준)으로 자동 스크롤 — 상태 B(리딩 헤더/본문) 캡처용 |
+| `PD_INTERESTS_OVERRIDE=VLN[,…]` | 관심 분야 강제 (부팅 중 `spawn defaults write`는 cfprefsd 캐시 레이스로 불신뢰 — 이 훅 사용) |
+| `PD_STATS_DETAIL=1` | 통계 탭의 하이라이트 논문 상세를 자동 push (통계 네비게이션 검증용) |
 > ⚠️ `simctl`은 한 셸 스크립트 안에서 연속 launch 시 `SIMCTL_CHILD_*`를 **첫 launch에만** 적용. 화면별로 **개별 명령**(각각 terminate→uninstall→install→launch)으로 캡처할 것. `-KEY value` 런치 인자는 앱에 안 닿음(simctl이 먹음).
 
 ## 4. 코드 구조 (`PaperDaily/PaperDaily/`)
 - `PaperDailyApp.swift` — `@main`, `RootView`(스플래시→온보딩/메인), 폰트 등록, 스플래시 동안 밝은 상태바.
-- `AppState.swift` — 단일 스토어. `lang`·`frequency`·`interests`·`savedIDs`/`readIDs`/`toReadItems`·피드 로딩·라이브러리 헬퍼·런치 훅 파싱.
+- `AppState.swift` — 단일 스토어. `lang`·`frequency`·`interests`·`onboarded`(모두 영속, 4-4)·`savedIDs`/`readIDs`/`toReadItems`·피드 로딩·라이브러리 헬퍼·런치 훅 파싱. **관심 분야 ↔ 피드 연동(4-1)**: 온보딩 칩은 실피드가 있으면 실제 카테고리(VLN/Planner), 피드는 `interests`로 필터링(분류 체계가 안 겹치면 필터 해제 + 실카테고리로 자동 정렬).
 - `Localization.swift` — `AppLanguage`, `Strings`(ko/en 사전), `Topics`/`Tags`(한글 canonical→영문) 매핑, `FeedHeaderText`, `LocalizedString`.
 - `Models.swift` — `Frequency`, `Paper`, `LibraryItem`, 주간 통계 타입.
 - `SampleData.swift` — 피드 3편 + 라이브러리 전용 6편 + `catalog`(전체) + 주간 통계.
@@ -62,7 +67,10 @@ xcrun simctl io booted screenshot out.png
 - `Components.swift` — `FlowLayout`, 칩/태그/`MatchBadge`/`ProgressTrack`/버튼/`AppTabBar`(점 슬라이드).
 - `MainTabView.swift` — 커스텀 탭 컨테이너(4탭 상시 유지 + 크로스페이드, 영속 탭바, 상세 push 시 탭바 숨김).
 - `OnboardingView.swift` — `LanguageSegment`·`FrequencySegment`·`InterestChip`.
-- `FeedView.swift` · `PaperDetailView.swift` · `LibraryView.swift` · `WeeklySummaryView.swift` · `SettingsView.swift`.
+- `FeedView.swift` · `PaperDetailView.swift`(진입 탭에 맞는 뒤로가기 라벨) · `LibraryView.swift` · `SettingsView.swift`.
+- `WeeklySummaryView.swift` — **주간 요약은 전부 실제 상태에서 파생**: 읽음/저장 개수는 `readIDs`/`savedIDs`, 주제 분포는 저장·읽은 논문의 카테고리 비율(상위 4 + 기타), 하이라이트는 그중 리뷰가 가장 긴 논문(탭 → 상세), 연속 일수는 읽음 처리한 날짜(`PD_READ_DAYS`) 기반. 데이터가 없으면 빈 상태 문구.
+- `ReviewReaderView.swift` — **네이티브 리뷰 리더 (화면 6/7)**: `paper.reviewMarkdownURL`(전처리 마크다운)을 MarkdownUI+SwiftMath로 렌더. 출판 정보/목차 카드, 리딩 헤더(현재 섹션+진행률), 섹션 네비, 수식(파싱 실패 시 serif italic 폴백), 다크 ASCII 다이어그램, 읽기 위치 저장(UserDefaults). 피드에 `reviewMarkdownURL` 필드가 생기면 자동으로 이 리더가 우선됨. 테스트: `PD_REVIEW_SAMPLE=1` + 번들 `SampleReview.md`.
+- `ReviewView.swift` — (과도기) WKWebView 리뷰 리더. `reviewMarkdownURL`이 없고 `reviewURL`만 있을 때 사용. `app=1`을 붙여 로드하면 페이지가 자체 상단 바를 숨김. 웹 리뷰 페이지 디자인은 맥미니 `~/repos/paper-review/scripts/paperdaily-feed/generate.js`가 생성 — 콘텐츠 계약은 [`REVIEW-FORMAT.md`](REVIEW-FORMAT.md).
 - `SplashView.swift` — 테라코타 스플래시(Dancing Script 워드마크 + 로딩바).
 - `SwipeBack.swift` — 백버튼 숨긴 상태에서 엣지 스와이프 뒤로가기 활성화(`UINavigationController` 확장).
 - `DancingScript.ttf`(번들 폰트) + `DancingScript-OFL.txt`(라이선스). `Assets.xcassets`(AppIcon·AccentColor).
