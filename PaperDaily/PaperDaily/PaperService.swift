@@ -15,6 +15,7 @@ struct FeedHeader: Equatable {
 
 struct DailyFeed {
     let papers: [Paper]
+    let archive: [Paper]      // past batches — library resolution only, never shown in the feed
     let header: FeedHeader?   // optional override of the frequency-derived header
 }
 
@@ -90,6 +91,7 @@ private struct DailyFeedDTO: Decodable {
     let frequency: String?
     let header: HeaderDTO?
     let papers: [PaperDTO]
+    let archive: [PaperDTO]?   // optional — older feeds have no archive
 
     struct HeaderDTO: Decodable {
         let date: String?
@@ -153,6 +155,10 @@ private struct DailyFeedDTO: Decodable {
             guard let h = header, let d = h.date, let t = h.title, let s = h.subtitle else { return nil }
             return FeedHeader(date: d, title: t, subtitle: s)
         }()
-        return DailyFeed(papers: papers.map { $0.toPaper() }, header: mappedHeader)
+        return DailyFeed(
+            papers: papers.map { $0.toPaper() },
+            archive: (archive ?? []).map { $0.toPaper() },
+            header: mappedHeader
+        )
     }
 }

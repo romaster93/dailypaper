@@ -77,5 +77,30 @@
       "reason": "회원님이 자주 읽는 **생성모델 효율화** 주제와 방법론이 가깝고, 저장한 디퓨전 논문과 이어져요.",
       "reasonEn": "Close to the **generative-efficiency** topics you read often, and it follows the diffusion paper you saved."
     }
+  ],
+  "archive": [
+    {
+      "id": "sparse-attention-survey",
+      "venue": "TACL 2025",
+      "venueDetail": "TACL 2025 · SURVEY",
+      "matchScore": 88,
+      "category": "자연어처리",
+      "feedTitle": "A Survey of Sparse Attention Methods for Long-Context Transformers",
+      "authorsShort": "N. Okafor, D. Ruiz +5",
+      "feedAbstract": "A systematic comparison of sparse attention families for long-context transformers, with guidance on when each pattern pays off.",
+      "tags": ["#LLM", "#효율화"],
+      "titleEN": "A Survey of Sparse Attention Methods for Long-Context Transformers",
+      "titleKO": "긴 문맥 트랜스포머를 위한 희소 어텐션 기법 서베이",
+      "authorsEN": "Nkechi Okafor, Diego Ruiz, +5 others",
+      "authorsKO": "은케치 오카포, 디에고 루이즈 외 5명",
+      "abstractEN": "We systematically compare families of sparse attention methods for long-context transformers, covering fixed patterns, learned sparsity, and retrieval-based hybrids. We characterize the regimes where each family offers the best quality-compute trade-off and distill practical guidance for practitioners.",
+      "abstractKO": "긴 문맥 트랜스포머를 위한 희소 어텐션 기법들을 고정 패턴, 학습형 희소화, 검색 결합 하이브리드로 나누어 체계적으로 비교한다. 각 계열이 품질-연산 트레이드오프에서 유리한 구간을 규명하고, 실무자를 위한 선택 가이드를 제시한다.",
+      "detailTags": ["#LLM", "#효율화", "#어텐션", "#서베이"],
+      "year": "2025",
+      "citations": 33,
+      "readMinutes": 18,
+      "reason": "이전 배치에서 공개된 논문이에요. 저장/읽음 목록 해석을 위해 아카이브에 유지됩니다.",
+      "reasonEn": "Published in an earlier batch — kept in the archive so your saved/read lists still resolve."
+    }
   ]
 }

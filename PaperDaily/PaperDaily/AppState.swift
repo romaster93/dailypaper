@@ -60,6 +60,7 @@ final class AppState: ObservableObject {
     // 피드 (원격 daily.json 로드 → 없으면 샘플)
     @Published var activeFilter: String = "전체"
     @Published var feed: [Paper] = SampleData.feed
+    @Published var feedArchive: [Paper] = []   // 과거 배치 — 피드에는 안 보이고 라이브러리 해석용
     @Published var feedHeader: FeedHeader? = nil
     @Published var feedSource: FeedSource = .sample
     @Published var isLoadingFeed = false
@@ -180,6 +181,7 @@ final class AppState: ObservableObject {
     func refreshFeed() async {
         guard let url = Config.feedURL else {
             feed = SampleData.feed
+            feedArchive = []
             feedHeader = nil
             feedSource = .sample
             return
@@ -189,6 +191,7 @@ final class AppState: ObservableObject {
         do {
             let daily = try await RemotePaperService(url: url).loadDailyFeed()
             feed = daily.papers.isEmpty ? SampleData.feed : daily.papers
+            feedArchive = daily.archive
             feedHeader = daily.header
             feedSource = .network
             if !filteredFeed.contains(where: { $0.filterCategory == activeFilter }), activeFilter != "전체" {
@@ -197,10 +200,12 @@ final class AppState: ObservableObject {
         } catch {
             if let cached = FeedCache.shared.load() {
                 feed = cached.papers
+                feedArchive = cached.archive
                 feedHeader = cached.header
                 feedSource = .cache
             } else {
                 feed = SampleData.feed
+                feedArchive = []
                 feedHeader = nil
                 feedSource = .failed(error.localizedDescription)
             }
@@ -228,10 +233,11 @@ final class AppState: ObservableObject {
 
     // MARK: Library (state-driven)
 
-    /// Every resolvable paper — current feed first (remote picks win), then the bundled catalog.
+    /// Every resolvable paper — current feed first (remote picks win), then the
+    /// feed archive (past batches), then the bundled catalog.
     var catalog: [Paper] {
         var seen = Set<String>()
-        return (feed + SampleData.catalog).filter { seen.insert($0.id).inserted }
+        return (feed + feedArchive + SampleData.catalog).filter { seen.insert($0.id).inserted }
     }
 
     /// Rows for a tab: To-read is the seeded list; Saved/Done reflect user actions.
