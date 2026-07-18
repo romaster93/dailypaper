@@ -51,6 +51,8 @@ struct Strings {
     // Settings
     let settingsTitle, setLanguage, setNotif, setTransLang, setSource, replayOnboarding: String
     let notifDaily, notifWeekly, notifMonthly: String
+    // Review (에이전트 작성 리뷰)
+    let readReview, reviewLoadFail, reviewRetry: String
 
     static func of(_ lang: AppLanguage) -> Strings { lang == .ko ? .ko : .en }
 
@@ -78,7 +80,8 @@ struct Strings {
         topicDist: "주제 분포", highlightLabel: "이번 주 하이라이트",
         settingsTitle: "설정", setLanguage: "언어", setNotif: "알림", setTransLang: "번역 언어",
         setSource: "논문 소스", replayOnboarding: "온보딩 다시 보기",
-        notifDaily: "매일 아침", notifWeekly: "매주 월요일", notifMonthly: "매달 1일"
+        notifDaily: "매일 아침", notifWeekly: "매주 월요일", notifMonthly: "매달 1일",
+        readReview: "전체 리뷰 보기", reviewLoadFail: "리뷰를 불러오지 못했어요.", reviewRetry: "다시 시도"
     )
 
     static let en = Strings(
@@ -105,7 +108,8 @@ struct Strings {
         topicDist: "TOPIC MIX", highlightLabel: "HIGHLIGHT OF THE WEEK",
         settingsTitle: "Settings", setLanguage: "Language", setNotif: "Notifications", setTransLang: "Translation",
         setSource: "Paper source", replayOnboarding: "Replay onboarding",
-        notifDaily: "Every morning", notifWeekly: "Every Monday", notifMonthly: "1st of each month"
+        notifDaily: "Every morning", notifWeekly: "Every Monday", notifMonthly: "1st of each month",
+        readReview: "Read Full Review", reviewLoadFail: "Couldn’t load the review.", reviewRetry: "Try again"
     )
 }
 

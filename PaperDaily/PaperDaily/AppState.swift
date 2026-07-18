@@ -65,9 +65,13 @@ final class AppState: ObservableObject {
     @Published var isLoadingFeed = false
     private var didInitialLoad = false
 
-    // 저장/읽음 상태 (카드·상세 액션 → 라이브러리 탭에 반영)
-    @Published var savedIDs: Set<String> = []
-    @Published var readIDs: Set<String> = []
+    // 저장/읽음 상태 (카드·상세 액션 → 라이브러리 탭에 반영) — 변경 시 영속 (PD_LANG과 동일 패턴)
+    @Published var savedIDs: Set<String> = [] {
+        didSet { UserDefaults.standard.set(Array(savedIDs), forKey: "PD_SAVED_IDS") }
+    }
+    @Published var readIDs: Set<String> = [] {
+        didSet { UserDefaults.standard.set(Array(readIDs), forKey: "PD_READ_IDS") }
+    }
     // 읽을 목록(진행 중) — 시드된 목록, 스와이프/롱프레스로 삭제 가능
     @Published var toReadItems: [LibraryItem] = SampleData.toRead
 
@@ -90,6 +94,9 @@ final class AppState: ObservableObject {
         // Language: env/arg override → saved setting → device default. (didSet won't fire in init.)
         if let raw = string("PD_LANG"), let l = AppLanguage(rawValue: raw) { lang = l }
         else { lang = .deviceDefault }
+        // Saved/read papers persist across launches. (didSet won't fire in init.)
+        if let saved = defaults.stringArray(forKey: "PD_SAVED_IDS") { savedIDs = Set(saved) }
+        if let read = defaults.stringArray(forKey: "PD_READ_IDS") { readIDs = Set(read) }
         // Test hook: pre-seed a couple of saved papers (verify Saved tab wiring).
         if flag("PD_SEED_SAVED") { savedIDs = Set(SampleData.feed.prefix(2).map(\.id)) }
         // All stored properties are now initialized → safe to touch `self`.
@@ -221,17 +228,23 @@ final class AppState: ObservableObject {
 
     // MARK: Library (state-driven)
 
+    /// Every resolvable paper — current feed first (remote picks win), then the bundled catalog.
+    var catalog: [Paper] {
+        var seen = Set<String>()
+        return (feed + SampleData.catalog).filter { seen.insert($0.id).inserted }
+    }
+
     /// Rows for a tab: To-read is the seeded list; Saved/Done reflect user actions.
     func libraryItems(for tab: LibraryTab) -> [LibraryItem] {
         switch tab {
         case .toRead:
             return toReadItems
         case .saved:
-            return SampleData.catalog
+            return catalog
                 .filter { savedIDs.contains($0.id) }
                 .map { LibraryItem(paper: $0, relativeDate: LocalizedString("오늘", "Today"), progress: nil) }
         case .done:
-            return SampleData.catalog
+            return catalog
                 .filter { readIDs.contains($0.id) }
                 .map { LibraryItem(paper: $0, relativeDate: LocalizedString("오늘", "Today"), progress: 100) }
         }

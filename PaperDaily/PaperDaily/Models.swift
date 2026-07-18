@@ -51,6 +51,10 @@ struct Paper: Identifiable, Hashable {
     /// "왜 추천했나요?" 본문(UI 언어 따름). `**...**` 는 볼드(마크다운).
     let reason: LocalizedString
 
+    /// 에이전트 작성 리뷰 페이지 URL. nil이면 상세 화면에 리뷰 버튼이 숨겨진다.
+    /// (`var` + 기본값 → memberwise init에서 생략 가능, 기존 SampleData 호출부 유지.)
+    var reviewURL: String? = nil
+
     func title(translated: Bool) -> String { translated ? detailTitleKO : detailTitleEN }
     func authors(translated: Bool) -> String { translated ? authorsKO : authorsEN }
     func abstract(translated: Bool) -> String { translated ? abstractKO : abstractEN }

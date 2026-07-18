@@ -119,6 +119,7 @@ private struct DailyFeedDTO: Decodable {
         let readMinutes: Int
         let reason: String
         let reasonEn: String?
+        let reviewURL: String?
 
         func toPaper() -> Paper {
             Paper(
@@ -141,7 +142,8 @@ private struct DailyFeedDTO: Decodable {
                 year: year,
                 citations: citations,
                 readMinutes: readMinutes,
-                reason: LocalizedString(reason, reasonEn ?? reason)
+                reason: LocalizedString(reason, reasonEn ?? reason),
+                reviewURL: reviewURL
             )
         }
     }

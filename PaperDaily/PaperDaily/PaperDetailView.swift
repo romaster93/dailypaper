@@ -11,10 +11,16 @@ struct PaperDetailView: View {
     let paper: Paper
 
     @State private var translated: Bool
+    @State private var showReview = false
 
     init(paper: Paper, initialTranslated: Bool = false) {
         self.paper = paper
         _translated = State(initialValue: initialTranslated)
+    }
+
+    /// 에이전트 리뷰 페이지 URL (있을 때만 "전체 리뷰 보기" 버튼 노출).
+    private var reviewURL: URL? {
+        paper.reviewURL.flatMap(URL.init(string:))
     }
 
     var body: some View {
@@ -75,10 +81,12 @@ struct PaperDetailView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.bottom, 12)
 
-                    // 메타 행
+                    // 메타 행 (인용 0회는 표기 생략)
                     HStack(spacing: 16) {
                         Text(paper.year)
-                        Text(app.citedText(paper.citations))
+                        if paper.citations != 0 {
+                            Text(app.citedText(paper.citations))
+                        }
                         Text(app.readTimeText(paper.readMinutes))
                     }
                     .font(AppFont.mono(12))
@@ -159,6 +167,14 @@ struct PaperDetailView: View {
                     .padding(17)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Palette.accentSoftBg, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+
+                    // 전체 리뷰 보기 (에이전트 리뷰가 있는 논문만)
+                    if reviewURL != nil {
+                        PrimaryButton(title: app.strings.readReview, height: 50, radius: 14) {
+                            showReview = true
+                        }
+                        .padding(.top, 14)
+                    }
                 }
                 .padding(.horizontal, 26)
                 .padding(.top, 6)
@@ -168,5 +184,10 @@ struct PaperDetailView: View {
         .background(Palette.appBg.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(isPresented: $showReview) {
+            if let url = reviewURL {
+                ReviewView(paper: paper, url: url)
+            }
+        }
     }
 }
