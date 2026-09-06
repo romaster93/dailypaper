@@ -78,11 +78,16 @@ xcrun simctl io booted screenshot out.png
 ### 로컬라이제이션 추가 방법
 새 UI 문구 → `Localization.swift`의 `Strings` 구조체 + `ko`/`en` 인스턴스에 필드 추가 → 뷰에서 `app.strings.<key>`. 논문 본문(제목/초록)은 **원문 고정**(번역 토글로만 한국어), 태그/주제는 `Tags`/`Topics` 매핑, canonical 값은 한글 유지.
 
-## 5. 맥미니 피드 연동 (다음 단계, 미완)
-설계: 항상 켜진 맥미니가 매일 논문을 찾아 [`PaperDaily/Backend/daily.schema.md`](PaperDaily/Backend/daily.schema.md) 형식의 `daily.json`을 HTTPS URL에 게시 → 앱이 fetch(실패 시 캐시→샘플 폴백). 예시: [`daily.example.json`](PaperDaily/Backend/daily.example.json).
-- **연결하려면**: `Config.swift`의 `defaultFeedURLString`에 URL 한 줄. (테스트는 `PD_FEED_URL`.)
-- 검증 완료: 실제 코드로 예시 JSON 디코드 OK, 시뮬레이터 file:// end-to-end OK.
-- 맥미니의 현재 출력 형식을 알면 → JSON 어댑터 스크립트 작성 예정.
+## 5. 맥미니 피드 연동 (완료, 운영 중)
+`Config.swift`의 `defaultFeedURLString` = `https://romaster93.github.io/paperdaily-feed/daily.json` (GitHub Pages, 공개 레포 `paperdaily-feed`). 스키마: [`PaperDaily/Backend/daily.schema.md`](PaperDaily/Backend/daily.schema.md).
+
+**일일 파이프라인 (맥미니, 무인)**:
+1. NanoClaw paper-review 에이전트가 ~02:00 KST에 새 리뷰를 `~/repos/paper-review`(private)에 커밋.
+2. launchd `com.paperdaily.feedgen`(`~/Library/LaunchAgents/com.paperdaily.feedgen.plist`)이 04:30 KST에 `~/repos/paper-review/scripts/paperdaily-feed/run-daily.sh` 실행.
+3. `generate.js`(결정적 파서 — LLM 아님) → `validate.js` 스키마 검증 통과 시에만 `~/repos/paperdaily-feed`에 커밋·푸시 → Pages 서빙.
+4. 로그: `~/Library/Logs/paperdaily-feedgen.log`. 수동 재생성: `bash run-daily.sh`.
+
+앱 소비: 피드의 `reviewURL`(+`reviewMarkdownURL`)을 리뷰 리더가 로드. 콘텐츠 계약은 [`REVIEW-FORMAT.md`](REVIEW-FORMAT.md) 참고.
 
 ## 6. 출시 상태
 - **라이선스: © 2026 romaster93 · All Rights Reserved** ([`LICENSE`](LICENSE)). Dancing Script는 OFL 별도.
@@ -101,7 +106,7 @@ xcrun simctl io booted screenshot out.png
 - `.gitignore`: 빌드 산출물·DerivedData·`.omc/` 제외. 이 문서·스크린샷·폰트는 커밋됨.
 
 ## 8. 다음 작업 / TODO
-- [ ] 맥미니 `daily.json` 연동 (Config URL 설정 + 어댑터).
+- [x] 맥미니 `daily.json` 연동 — §5 참고, GitHub Pages(`paperdaily-feed`) 운영 중 (2026-07-18~).
 - [ ] (보류) 라이브러리 스와이프-삭제 — 현재는 **롱프레스 → 삭제** 및 상세의 "저장됨" 재탭으로 해제. (List 리팩터 필요.)
 - [ ] 공개 출시용 실백엔드(arXiv/번역 API) + 개인정보 처리방침.
 - [ ] (선택) 프로덕션 빌드에서 `PD_*` 테스트 훅 정리.
